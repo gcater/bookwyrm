@@ -3,14 +3,8 @@ import Head from "next/head";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 
-import { api } from "~/utils/api";
-
-interface Book {
-  id: number;
-  title: string;
-  author: string;
-}
-
+import { api } from "../utils/api";
+import React from "react";
 export default function Home() {
   return (
     <>
@@ -128,7 +122,7 @@ function bookDisplay() {
 
   return (
     <div>
-      {data.map((book: Book) => (
+      {data.map((book: any) => (
         <div key={book.id}>
           <h3>{book.title}</h3>
           <p>Author: {book.author}</p>
