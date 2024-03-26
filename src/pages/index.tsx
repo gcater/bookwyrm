@@ -1,12 +1,17 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
+import { useState, useEffect } from "react";
 
 import { api } from "~/utils/api";
 
-export default function Home() {
-  const hello = api.post.hello.useQuery({ text: "from tRPC" });
+interface Book {
+  id: number;
+  title: string;
+  author: string;
+}
 
+export default function Home() {
   return (
     <>
       <Head>
@@ -16,39 +21,11 @@ export default function Home() {
       </Head>
       <main className=" flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-          <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
-            Create <span className="text-[hsl(280,100%,70%)]">T3</span> App
-          </h1>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
-            <Link
-              className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-              href="https://create.t3.gg/en/usage/first-steps"
-              target="_blank"
-            >
-              <h3 className="text-2xl font-bold">First Steps →</h3>
-              <div className="text-lg">
-                Just the basics - Everything you need to know to set up your
-                database and authentication.
-              </div>
-            </Link>
-            <Link
-              className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-              href="https://create.t3.gg/en/introduction"
-              target="_blank"
-            >
-              <h3 className="text-2xl font-bold">Documentation →</h3>
-              <div className="text-lg">
-                Learn more about Create T3 App, the libraries it uses, and how
-                to deploy it.
-              </div>
-            </Link>
-          </div>
           <div className="flex flex-col items-center gap-2">
-            <p className="text-2xl text-white">
-              {hello.data ? hello.data.greeting : "Loading tRPC query..."}
-            </p>
             <AuthShowcase />
           </div>
+          <div>{uploadBook()}</div>
+          <div className="text-white">{bookDisplay()}</div>
         </div>
       </main>
     </>
@@ -60,9 +37,8 @@ function AuthShowcase() {
 
   const { data: secretMessage } = api.post.getSecretMessage.useQuery(
     undefined, // no input
-    { enabled: sessionData?.user !== undefined }
+    { enabled: sessionData?.user !== undefined },
   );
-
   return (
     <div className="flex flex-col items-center justify-center gap-4">
       <p className="text-center text-2xl text-white">
@@ -75,6 +51,89 @@ function AuthShowcase() {
       >
         {sessionData ? "Sign out" : "Sign in"}
       </button>
+    </div>
+  );
+}
+
+function uploadBook() {
+  const [title, setTitle] = useState("");
+  const [author, setAuthor] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const mutation = api.book.create.useMutation();
+
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    setSubmitting(true);
+
+    try {
+      await mutation.mutateAsync({ title: title, author: author });
+      setTitle("");
+      setAuthor("");
+      alert("Book added successfully!");
+    } catch (error) {
+      alert("Failed to add book.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <label htmlFor="title" className="block text-sm font-medium text-white">
+          Title
+        </label>
+        <input
+          type="text"
+          name="title"
+          id="title"
+          required
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+        />
+      </div>
+      <div>
+        <label
+          htmlFor="author"
+          className="block text-sm font-medium text-white"
+        >
+          Author
+        </label>
+        <input
+          type="text"
+          name="author"
+          id="author"
+          required
+          value={author}
+          onChange={(e) => setAuthor(e.target.value)}
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+        />
+      </div>
+      <button
+        type="submit"
+        disabled={submitting}
+        className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+      >
+        {submitting ? "Adding..." : "Add Book"}
+      </button>
+    </form>
+  );
+}
+
+function bookDisplay() {
+  const { data, error } = api.book.getAll.useQuery();
+  if (error) return <div>Failed to load books</div>;
+  if (!data) return <div>Loading...</div>;
+
+  return (
+    <div>
+      {data.map((book: Book) => (
+        <div key={book.id}>
+          <h3>{book.title}</h3>
+          <p>Author: {book.author}</p>
+        </div>
+      ))}
     </div>
   );
 }
