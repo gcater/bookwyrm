@@ -33,7 +33,7 @@ export default function Home() {
           <div className="flex flex-col items-center gap-2">
             <AuthShowcase />
           </div>
-          {shadForm()}
+          {ShadForm()}
         </div>
       </main>
     </>
@@ -70,7 +70,7 @@ const formSchema = z.object({
   title: z.string().min(2, { message: "title must be at least 2 characters." }),
 });
 
-export function shadForm() {
+export function ShadForm() {
   const mutation = api.book.create.useMutation();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
