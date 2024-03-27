@@ -62,6 +62,7 @@ model User {
     accounts      Account[]
     sessions      Session[]
     posts         Post[]
+    Book          Book[]
 }
 
 model VerificationToken {
@@ -70,4 +71,36 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model Book {
+    id          Int       @id @default(autoincrement())
+    title       String
+    author      String
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
+    createdBy   User      @relation(fields: [createdById], references: [id])
+    createdById String
+    chapters    Chapter[]
+}
+
+model Chapter {
+    id        Int       @id @default(autoincrement())
+    title     String
+    content   String
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    sections  Section[]
+    book      Book      @relation(fields: [bookId], references: [id])
+    bookId    Int
+}
+
+model Section {
+    id        Int      @id @default(autoincrement())
+    title     String
+    content   String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    chapter   Chapter  @relation(fields: [chapterId], references: [id])
+    chapterId Int
 }
