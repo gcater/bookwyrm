@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 
 import { api } from "~/utils/api";
 import { z } from "zod";
-import { useForm, useFieldArray, Controller } from "react-hook-form";
+import { useForm, useFieldArray, Controller, Control } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -35,6 +35,8 @@ const formSchema = z.object({
     })
   ),
 });
+
+type FormValues = z.infer<typeof formSchema>;
 
 export default function Home() {
   return (
@@ -89,7 +91,7 @@ export function ShadForm() {
     },
   });
   const { mutate: createBook } = api.book.create.useMutation();
-  const { fields: chapterFields, append: appendChapter } = useFieldArray({
+  const { fields: chapterFields, append: appendChapter } = useFieldArray<FormValues["chapters"][number]>({
     control,
     name: "chapters",
   });
@@ -114,7 +116,7 @@ export function ShadForm() {
   );
 }
 
-const ChapterComponent = ({ chapterIndex, control }) => {
+const ChapterComponent = ({ chapterIndex, control }: { chapterIndex: number; control: Control<FormValues, any> }) => {
   const { fields: sectionFields, append: appendSection } = useFieldArray({
     control,
     name: `chapters.${chapterIndex}.sections`,
@@ -134,7 +136,7 @@ const ChapterComponent = ({ chapterIndex, control }) => {
   );
 };
 
-const SectionComponent = ({ chapterIndex, sectionIndex, control }) => {
+const SectionComponent = ({ chapterIndex, sectionIndex, control }: { chapterIndex: number; sectionIndex: number; control: Control<FormValues, any> }) => {
   return (
     <div>
       <input {...control.register(`chapters.${chapterIndex}.sections.${sectionIndex}.title`)} placeholder="Section Title" />
