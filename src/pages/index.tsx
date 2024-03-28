@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 
 import { api } from "~/utils/api";
 import { z } from "zod";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray, Controller } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -19,6 +19,22 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
+
+const formSchema = z.object({
+  author: z.string().min(2, "Author must be at least 2 characters."),
+  title: z.string().min(2, "Title must be at least 2 characters."),
+  chapters: z.array(
+    z.object({
+      title: z.string().min(1, "Chapter title must be at least 1 character."),
+      sections: z.array(
+        z.object({
+          title: z.string().min(1, "Section title must be at least 1 character."),
+          content: z.string().min(1, "Section content must be at least 1 character."),
+        })
+      ),
+    })
+  ),
+});
 
 export default function Home() {
   return (
@@ -63,62 +79,66 @@ function AuthShowcase() {
   );
 }
 
-const formSchema = z.object({
-  author: z.string().min(2, {
-    message: "author must be at least 2 characters.",
-  }),
-  title: z.string().min(2, { message: "title must be at least 2 characters." }),
-});
-
 export function ShadForm() {
-  const mutation = api.book.create.useMutation();
-  const form = useForm<z.infer<typeof formSchema>>({
+  const { control, handleSubmit, register } = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       author: "",
       title: "",
+      chapters: [],
     },
   });
+  const { mutate: createBook } = api.book.create.useMutation();
+  const { fields: chapterFields, append: appendChapter } = useFieldArray({
+    control,
+    name: "chapters",
+  });
 
-  // 2. Define a submit handler.
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-    await mutation.mutateAsync(values);
-  }
+  const onSubmit = (data: z.infer<typeof formSchema>) => {
+    console.log(data);
+    createBook(data);
+  };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
-          control={form.control}
-          name="author"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Author</FormLabel>
-              <FormControl>
-                <Input placeholder="shadcn" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="title"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Title</FormLabel>
-              <FormControl>
-                <Input placeholder="shadcn" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit">Submit</Button>
-      </form>
-    </Form>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <input {...register("author")} placeholder="Author" />
+      <input {...register("title")} placeholder="Book Title" />
+      {chapterFields.map((chapter, index) => (
+        <ChapterComponent key={chapter.id} chapterIndex={index} control={control} />
+      ))}
+      <button type="button" onClick={() => appendChapter({ title: "", sections: [] })}>
+        Add Chapter
+      </button>
+      <button type="submit">Submit</button>
+    </form>
   );
 }
+
+const ChapterComponent = ({ chapterIndex, control }) => {
+  const { fields: sectionFields, append: appendSection } = useFieldArray({
+    control,
+    name: `chapters.${chapterIndex}.sections`,
+  });
+
+  return (
+    <fieldset>
+      <legend>Chapter {chapterIndex + 1}</legend>
+      <input {...control.register(`chapters.${chapterIndex}.title`)} placeholder="Chapter Title" />
+      {sectionFields.map((section, index) => (
+        <SectionComponent key={section.id} chapterIndex={chapterIndex} sectionIndex={index} control={control} />
+      ))}
+      <button type="button" onClick={() => appendSection({ title: "", content: "" })}>
+        Add Section
+      </button>
+    </fieldset>
+  );
+};
+
+const SectionComponent = ({ chapterIndex, sectionIndex, control }) => {
+  return (
+    <div>
+      <input {...control.register(`chapters.${chapterIndex}.sections.${sectionIndex}.title`)} placeholder="Section Title" />
+      <textarea {...control.register(`chapters.${chapterIndex}.sections.${sectionIndex}.content`)} placeholder="Section Content" />
+    </div>
+  );
+};

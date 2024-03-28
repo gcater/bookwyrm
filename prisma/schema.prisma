@@ -89,7 +89,6 @@ model Book {
 model Chapter {
     id        Int      @id @default(autoincrement())
     title     String
-    content   String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
