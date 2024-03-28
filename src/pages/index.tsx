@@ -28,11 +28,15 @@ const formSchema = z.object({
       title: z.string().min(1, "Chapter title must be at least 1 character."),
       sections: z.array(
         z.object({
-          title: z.string().min(1, "Section title must be at least 1 character."),
-          content: z.string().min(1, "Section content must be at least 1 character."),
-        })
+          title: z
+            .string()
+            .min(1, "Section title must be at least 1 character."),
+          content: z
+            .string()
+            .min(1, "Section content must be at least 1 character."),
+        }),
       ),
-    })
+    }),
   ),
 });
 
@@ -91,7 +95,9 @@ export function ShadForm() {
     },
   });
   const { mutate: createBook } = api.book.create.useMutation();
-  const { fields: chapterFields, append: appendChapter } = useFieldArray<FormValues["chapters"][number]>({
+  const { fields: chapterFields, append: appendChapter } = useFieldArray<
+    FormValues["chapters"][number]
+  >({
     control,
     name: "chapters",
   });
@@ -106,9 +112,16 @@ export function ShadForm() {
       <input {...register("author")} placeholder="Author" />
       <input {...register("title")} placeholder="Book Title" />
       {chapterFields.map((chapter, index) => (
-        <ChapterComponent key={chapter.id} chapterIndex={index} control={control} />
+        <ChapterComponent
+          key={chapter.id}
+          chapterIndex={index}
+          control={control}
+        />
       ))}
-      <button type="button" onClick={() => appendChapter({ title: "", sections: [] })}>
+      <button
+        type="button"
+        onClick={() => appendChapter({ title: "", sections: [] })}
+      >
         Add Chapter
       </button>
       <button type="submit">Submit</button>
@@ -116,7 +129,13 @@ export function ShadForm() {
   );
 }
 
-const ChapterComponent = ({ chapterIndex, control }: { chapterIndex: number; control: Control<FormValues, any> }) => {
+const ChapterComponent = ({
+  chapterIndex,
+  control,
+}: {
+  chapterIndex: number;
+  control: Control<FormValues>;
+}) => {
   const { fields: sectionFields, append: appendSection } = useFieldArray({
     control,
     name: `chapters.${chapterIndex}.sections`,
@@ -125,22 +144,51 @@ const ChapterComponent = ({ chapterIndex, control }: { chapterIndex: number; con
   return (
     <fieldset>
       <legend>Chapter {chapterIndex + 1}</legend>
-      <input {...control.register(`chapters.${chapterIndex}.title`)} placeholder="Chapter Title" />
+      <input
+        {...control.register(`chapters.${chapterIndex}.title`)}
+        placeholder="Chapter Title"
+      />
       {sectionFields.map((section, index) => (
-        <SectionComponent key={section.id} chapterIndex={chapterIndex} sectionIndex={index} control={control} />
+        <SectionComponent
+          key={section.id}
+          chapterIndex={chapterIndex}
+          sectionIndex={index}
+          control={control}
+        />
       ))}
-      <button type="button" onClick={() => appendSection({ title: "", content: "" })}>
+      <button
+        type="button"
+        onClick={() => appendSection({ title: "", content: "" })}
+      >
         Add Section
       </button>
     </fieldset>
   );
 };
 
-const SectionComponent = ({ chapterIndex, sectionIndex, control }: { chapterIndex: number; sectionIndex: number; control: Control<FormValues, any> }) => {
+const SectionComponent = ({
+  chapterIndex,
+  sectionIndex,
+  control,
+}: {
+  chapterIndex: number;
+  sectionIndex: number;
+  control: Control<FormValues>;
+}) => {
   return (
     <div>
-      <input {...control.register(`chapters.${chapterIndex}.sections.${sectionIndex}.title`)} placeholder="Section Title" />
-      <textarea {...control.register(`chapters.${chapterIndex}.sections.${sectionIndex}.content`)} placeholder="Section Content" />
+      <input
+        {...control.register(
+          `chapters.${chapterIndex}.sections.${sectionIndex}.title`,
+        )}
+        placeholder="Section Title"
+      />
+      <textarea
+        {...control.register(
+          `chapters.${chapterIndex}.sections.${sectionIndex}.content`,
+        )}
+        placeholder="Section Content"
+      />
     </div>
   );
 };
