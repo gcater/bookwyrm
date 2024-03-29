@@ -19,28 +19,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-const formSchema = z.object({
-  author: z.string().min(2, "Author must be at least 2 characters."),
-  title: z.string().min(2, "Title must be at least 2 characters."),
-  chapters: z.array(
-    z.object({
-      title: z.string().min(1, "Chapter title must be at least 1 character."),
-      sections: z.array(
-        z.object({
-          title: z
-            .string()
-            .min(1, "Section title must be at least 1 character."),
-          content: z
-            .string()
-            .min(1, "Section content must be at least 1 character."),
-        }),
-      ),
-    }),
-  ),
-});
-
-type FormValues = z.infer<typeof formSchema>;
+import BookForm from "src/components/bookForm";
 
 export default function Home() {
   return (
@@ -55,7 +34,7 @@ export default function Home() {
           <div className="flex flex-col items-center gap-2">
             <AuthShowcase />
           </div>
-          {ShadForm()}
+          {BookForm()}
         </div>
       </main>
     </>
@@ -84,111 +63,3 @@ function AuthShowcase() {
     </div>
   );
 }
-
-export function ShadForm() {
-  const { control, handleSubmit, register } = useForm({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      author: "",
-      title: "",
-      chapters: [],
-    },
-  });
-  const { mutate: createBook } = api.book.create.useMutation();
-  const { fields: chapterFields, append: appendChapter } = useFieldArray<
-    FormValues["chapters"][number]
-  >({
-    control,
-    name: "chapters",
-  });
-
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log(data);
-    createBook(data);
-  };
-
-  return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <input {...register("author")} placeholder="Author" />
-      <input {...register("title")} placeholder="Book Title" />
-      {chapterFields.map((chapter, index) => (
-        <ChapterComponent
-          key={chapter.id}
-          chapterIndex={index}
-          control={control}
-        />
-      ))}
-      <button
-        type="button"
-        onClick={() => appendChapter({ title: "", sections: [] })}
-      >
-        Add Chapter
-      </button>
-      <button type="submit">Submit</button>
-    </form>
-  );
-}
-
-const ChapterComponent = ({
-  chapterIndex,
-  control,
-}: {
-  chapterIndex: number;
-  control: Control<FormValues>;
-}) => {
-  const { fields: sectionFields, append: appendSection } = useFieldArray({
-    control,
-    name: `chapters.${chapterIndex}.sections`,
-  });
-
-  return (
-    <fieldset>
-      <legend>Chapter {chapterIndex + 1}</legend>
-      <input
-        {...control.register(`chapters.${chapterIndex}.title`)}
-        placeholder="Chapter Title"
-      />
-      {sectionFields.map((section, index) => (
-        <SectionComponent
-          key={section.id}
-          chapterIndex={chapterIndex}
-          sectionIndex={index}
-          control={control}
-        />
-      ))}
-      <button
-        type="button"
-        onClick={() => appendSection({ title: "", content: "" })}
-      >
-        Add Section
-      </button>
-    </fieldset>
-  );
-};
-
-const SectionComponent = ({
-  chapterIndex,
-  sectionIndex,
-  control,
-}: {
-  chapterIndex: number;
-  sectionIndex: number;
-  control: Control<FormValues>;
-}) => {
-  return (
-    <div>
-      <input
-        {...control.register(
-          `chapters.${chapterIndex}.sections.${sectionIndex}.title`,
-        )}
-        placeholder="Section Title"
-      />
-      <textarea
-        {...control.register(
-          `chapters.${chapterIndex}.sections.${sectionIndex}.content`,
-        )}
-        placeholder="Section Content"
-      />
-    </div>
-  );
-};

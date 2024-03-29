@@ -1,10 +1,9 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
-
 interface Chapter {
   title: string;
-  sections: { title: string; content: string; }[];
+  sections: { title: string; content: string }[];
 }
 
 export const bookRouter = createTRPCRouter({
@@ -13,14 +12,18 @@ export const bookRouter = createTRPCRouter({
       z.object({
         title: z.string().min(1, "Title is required"),
         author: z.string().min(1, "Author is required"),
-        chapters: z.array(z.object({
-          title: z.string().min(1, "Chapter title is required"),
-          sections: z.array(z.object({
-            title: z.string().min(1, "Section title is required"),
-            content: z.string().min(1, "Section content is required"),
-          })),
-        })),
-      })
+        chapters: z.array(
+          z.object({
+            title: z.string().min(1, "Chapter title is required"),
+            sections: z.array(
+              z.object({
+                title: z.string().min(1, "Section title is required"),
+                content: z.string().min(1, "Section content is required"),
+              }),
+            ),
+          }),
+        ),
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       // Simulate a slow db call if necessary
@@ -68,5 +71,18 @@ export const bookRouter = createTRPCRouter({
     });
 
     return books;
+  }),
+  getLatest: protectedProcedure.query(({ ctx }) => {
+    return ctx.db.book.findFirst({
+      orderBy: { createdAt: "desc" },
+      where: { createdBy: { id: ctx.session.user.id } },
+      include: {
+        chapters: {
+          include: {
+            sections: true,
+          },
+        },
+      },
+    });
   }),
 });
