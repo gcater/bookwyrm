@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { Chapter } from "src/server/api/routers/book";
 
 const formSchema = z.object({
   author: z.string().min(2, "Author must be at least 2 characters."),
@@ -43,7 +44,7 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 const BookForm = (): JSX.Element => {
-  const { control, handleSubmit, register, setValue, getValues } = useForm({
+  const { control, handleSubmit, register } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       author: "",
@@ -51,28 +52,31 @@ const BookForm = (): JSX.Element => {
       chapters: [],
     },
   });
-  const { mutate: createBook } = api.book.create.useMutation();
-
-  // Define a type for a chapter if not already defined
-  type Chapter = z.infer<typeof formSchema>["chapters"][number];
-
+  const mutation = api.book.create.useMutation();
+  const { fields: chapters, append: appendChapter } = useFieldArray({
+    control,
+    name: "chapters",
+  });
+  ``;
   const addChapter = () => {
-    const currentChapters = getValues("chapters");
-    const newChapter: Chapter = { title: "", sections: [] }; // Explicitly type the newChapter
-    setValue("chapters", [...currentChapters, newChapter]);
+    appendChapter({ title: "", sections: [] });
   };
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
+  const onSubmit = (data: FormValues) => {
     console.log(data);
-    createBook(data);
+    mutation.mutate(data);
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <input {...register("author")} placeholder="Author" />
       <input {...register("title")} placeholder="Book Title" />
-      {getValues("chapters").map((chapter, index) => (
-        <ChapterComponent key={index} chapterIndex={index} control={control} />
+      {chapters.map((chapter, index) => (
+        <ChapterComponent
+          key={chapter.id}
+          chapterIndex={index}
+          control={control}
+        />
       ))}
       <button type="button" onClick={addChapter}>
         Add Chapter
@@ -93,7 +97,6 @@ const ChapterComponent = ({
     control,
     name: `chapters.${chapterIndex}.sections`,
   });
-
   return (
     <fieldset>
       <legend>Chapter {chapterIndex + 1}</legend>

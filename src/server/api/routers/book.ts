@@ -1,7 +1,7 @@
 import { z } from "zod";
-import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "src/server/api/trpc";
 
-interface Chapter {
+export interface Chapter {
   title: string;
   sections: { title: string; content: string }[];
 }
