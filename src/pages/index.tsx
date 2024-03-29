@@ -19,8 +19,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import BookForm from "src/components/bookForm";
-
+import BookForm from "@/components/BookForm";
+import BookRender from "@/components/BookRender";
 export default function Home() {
   return (
     <>
@@ -36,6 +36,7 @@ export default function Home() {
           </div>
           {BookForm()}
         </div>
+        {BookRender()}
       </main>
     </>
   );

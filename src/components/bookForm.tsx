@@ -42,7 +42,7 @@ const formSchema = z.object({
 });
 
 type FormValues = z.infer<typeof formSchema>;
-
+// This will return the book form JSX Element. It will allow a user to type in the author, title, and add chapters. Each chapter will have a title and can have multiple sections. Sections will have a title and text content.
 const BookForm = (): JSX.Element => {
   const { control, handleSubmit, register } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
