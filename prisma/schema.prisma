@@ -74,33 +74,36 @@ model VerificationToken {
 }
 
 model Book {
-    id          Int       @id @default(autoincrement())
+    id        Int      @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
     title       String
     author      String
-    createdAt   DateTime  @default(now())
-    updatedAt   DateTime  @updatedAt
     createdBy   User      @relation(fields: [createdById], references: [id])
     createdById String
     chapters    Chapter[]
 }
 
 model Chapter {
-    id        Int       @id @default(autoincrement())
-    title     String
-    content   String
-    createdAt DateTime  @default(now())
-    updatedAt DateTime  @updatedAt
-    sections  Section[]
-    book      Book      @relation(fields: [bookId], references: [id])
-    bookId    Int
+    id        Int      @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    title    String
+    content  String
+    sections Section[]
+    book     Book      @relation(fields: [bookId], references: [id])
+    bookId   Int
 }
 
 model Section {
     id        Int      @id @default(autoincrement())
-    title     String
-    content   String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-    chapter   Chapter  @relation(fields: [chapterId], references: [id])
+
+    title     String
+    content   String
+    chapter   Chapter @relation(fields: [chapterId], references: [id])
     chapterId Int
 }

@@ -13,7 +13,7 @@ export const bookRouter = createTRPCRouter({
         data: {
           title: input.title,
           author: input.author,
-          createdBy: { connect: { id: ctx.session.user.id } },
+          createdById: ctx.session.user.id,
         },
       });
     }),
