@@ -81,7 +81,7 @@ const MyAutoForm = (): JSX.Element => {
       to create auto-saving forms etc.
       */}
             <Button type="submit">Send now</Button>
-            <AutoFormSubmit>Send now</AutoFormSubmit>
+            {/* <AutoFormSubmit>Send now</AutoFormSubmit> */}
 
             {/*
       All children passed to the form will be rendered below the form.

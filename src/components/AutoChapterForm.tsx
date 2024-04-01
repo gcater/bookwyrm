@@ -25,7 +25,21 @@ interface AutoChapterFormProps {
 
 const MyAutoForm = ({ bookId }: AutoChapterFormProps): JSX.Element => {
   const { mutate, data, isSuccess } = api.book.addChapter.useMutation({
-    onSuccess: (data: Chapter) => {
+    onSuccess: (data: {
+      chapters: {
+        id: number;
+        title: string;
+        createdAt: Date;
+        updatedAt: Date;
+        bookId: number;
+      }[];
+      id: number;
+      createdAt: Date;
+      updatedAt: Date;
+      title: string;
+      author: string;
+      createdById: string;
+    }) => {
       console.log(data);
     },
   });
@@ -45,7 +59,7 @@ const MyAutoForm = ({ bookId }: AutoChapterFormProps): JSX.Element => {
     <div className="p-6">
       <Card>
         <CardHeader>
-          <CardTitle>Book Form</CardTitle>
+          <CardTitle>Chapter Form</CardTitle>
         </CardHeader>
         <CardContent>
           <AutoForm
@@ -73,7 +87,7 @@ const MyAutoForm = ({ bookId }: AutoChapterFormProps): JSX.Element => {
       to create auto-saving forms etc.
       */}
             <Button type="submit">Send now</Button>
-            <AutoFormSubmit>Send now</AutoFormSubmit>
+            {/* <AutoFormSubmit>Send now</AutoFormSubmit> */}
 
             {/*
       All children passed to the form will be rendered below the form.
@@ -90,7 +104,7 @@ const MyAutoForm = ({ bookId }: AutoChapterFormProps): JSX.Element => {
         {bookId && (
           <CardContent>
             <a href={`/book/${bookId}/addChapter`} className="button-class">
-              Add Chapter
+              Add Section
             </a>
           </CardContent>
         )}

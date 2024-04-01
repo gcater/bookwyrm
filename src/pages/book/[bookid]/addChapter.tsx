@@ -26,7 +26,6 @@ import AutoChapterForm from "~/components/AutoChapterForm";
 export default function AddChapterPage() {
   const router = useRouter();
   const { bookid } = router.query; // `bookid` matches the dynamic segment name
-  console.log(bookid);
   return (
     <>
       <Head>
@@ -38,7 +37,6 @@ export default function AddChapterPage() {
         <div className="container flex w-full flex-col items-center justify-center gap-12 px-4 py-16">
           <div className="flex w-full flex-col items-center gap-2"></div>
         </div>
-        {bookid}
         <div className="flex w-full">
           <div className="w-1/2">
             <AutoChapterForm bookId={bookid as string} />
