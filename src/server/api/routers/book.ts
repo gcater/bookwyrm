@@ -1,9 +1,21 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "src/server/api/trpc";
 
+export interface Section {
+  title: string;
+  content: string;
+}
+
 export interface Chapter {
   title: string;
   sections: { title: string; content: string }[];
+}
+
+export interface Book {
+  id: number;
+  title: string;
+  author: string;
+  chapters: Chapter[];
 }
 
 export const bookRouter = createTRPCRouter({
@@ -85,4 +97,43 @@ export const bookRouter = createTRPCRouter({
       },
     });
   }),
+  addChapter: protectedProcedure
+    .input(
+      z.object({
+        bookId: z.number(),
+        chapter: z.object({
+          title: z.string().min(1, "Chapter title is required"),
+          sections: z.array(
+            z.object({
+              title: z.string().min(1, "Section title is required"),
+              content: z.string().min(1, "Section content is required"),
+            }),
+          ),
+        }),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      // First, ensure the book exists
+      const bookExists = await ctx.db.book.findUnique({
+        where: { id: input.bookId },
+      });
+      if (!bookExists) {
+        throw new Error("Book not found");
+      }
+
+      // Then, use the appropriate method to add a chapter to the book
+      const updatedBook = await ctx.db.book.update({
+        where: { id: input.bookId },
+        data: {
+          chapters: {
+            create: { title: input.chapter.title, sections: {} }, // Assuming 'create' is the correct operation for your ORM
+          },
+        },
+        include: {
+          chapters: true, // Include chapters in the response for verification or further use
+        },
+      });
+
+      return updatedBook;
+    }),
 });

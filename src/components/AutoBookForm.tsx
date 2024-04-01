@@ -5,6 +5,8 @@ import { DependencyType } from "./ui/auto-form/types";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "@/components/ui/button";
 import { api } from "~/utils/api";
+import type { Book } from "~/server/api/routers/book";
+import React, { useState } from "react"; // Import useState
 const formSchema = z.object({
   title: z
     .string({
@@ -28,7 +30,14 @@ const formSchema = z.object({
 });
 
 const MyAutoForm = (): JSX.Element => {
-  const mutation = api.book.create.useMutation();
+  const { mutate, data, isSuccess } = api.book.create.useMutation({
+    onSuccess: (data: Book) => {
+      console.log(data);
+      setBookId(data.id.toString()); // Convert number to string
+    },
+  });
+  const [bookId, setBookId] = useState<string | null>(null); // State to store the book ID
+
   const handleSubmit = async ({
     title,
     author,
@@ -37,7 +46,8 @@ const MyAutoForm = (): JSX.Element => {
     author: string;
   }) => {
     console.log(title, author);
-    mutation.mutate({ title, author, chapters: [] });
+    mutate({ title, author, chapters: [] });
+    //console.log(data?.id);
   };
   return (
     <div className="p-6">
@@ -85,6 +95,13 @@ const MyAutoForm = (): JSX.Element => {
             </p>
           </AutoForm>
         </CardContent>
+        {bookId && (
+          <CardContent>
+            <a href={`/book/${bookId}/addChapter`} className="button-class">
+              Add Chapter
+            </a>
+          </CardContent>
+        )}
       </Card>
     </div>
   );
