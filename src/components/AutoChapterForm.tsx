@@ -62,7 +62,6 @@ const formSchema = z.object({
   }),
 });
 
-
 const MyAutoForm = (): JSX.Element => {
   return (
     <AutoForm
