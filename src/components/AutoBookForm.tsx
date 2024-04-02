@@ -86,21 +86,36 @@ const MyAutoForm = (): JSX.Element => {
             {/*
       All children passed to the form will be rendered below the form.
       */}
-            <p className="text-sm text-gray-500">
-              By submitting this form, you agree to our{" "}
-              <a href="#" className="text-primary underline">
-                terms and conditions
-              </a>
-              .
-            </p>
+           
           </AutoForm>
         </CardContent>
         {bookId && (
-          <CardContent>
-            <a href={`/book/${bookId}/addChapter`} className="button-class">
-              Add Chapter
-            </a>
-          </CardContent>
+          <>
+            <CardContent>
+              <a href={`/book/${bookId}/addChapter`} className="button-class">
+                Add Chapter
+              </a>
+            </CardContent>
+            <CardContent>
+              <Button
+                onClick={() => {
+                  if (window.confirm("Are you sure you want to delete this book?")) {
+                    api.book.delete.useMutation().mutate(bookId, {
+                      onSuccess: () => {
+                        alert("Book deleted successfully.");
+                        // Redirect or update UI accordingly
+                      },
+                      onError: (error) => {
+                        alert(`Error deleting book: ${error.message}`);
+                      },
+                    });
+                  }
+                }}
+              >
+                Delete Book
+              </Button>
+            </CardContent>
+          </>
         )}
       </Card>
     </div>
@@ -108,3 +123,4 @@ const MyAutoForm = (): JSX.Element => {
 };
 
 export default MyAutoForm;
+

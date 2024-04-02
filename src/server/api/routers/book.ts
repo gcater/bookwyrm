@@ -71,6 +71,13 @@ export const bookRouter = createTRPCRouter({
       return book;
     }),
 
+  delete: protectedProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
+    // Assuming 'input' is the ID of the book to delete
+    const deletedBook = await ctx.db.book.delete({
+      where: { id: input },
+    });
+    return deletedBook;
+  }),
   getAll: protectedProcedure.query(async ({ ctx }) => {
     // Fetch all books created by the current user, including their chapters and sections
     const books = await ctx.db.book.findMany({
