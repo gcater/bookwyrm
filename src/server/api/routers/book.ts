@@ -11,6 +11,7 @@ export interface Chapter {
   id?: string;
   title: string;
   sections: { title: string; content: string }[];
+  bookId?: string;
 }
 
 export interface Book {
@@ -114,7 +115,7 @@ export const bookRouter = createTRPCRouter({
         }),
       }),
     )
-    .mutation(async ({ ctx, input }) => {
+    .mutation(async ({ ctx, input }): Promise<Chapter> => {
       // First, ensure the book exists
       const bookExists = await ctx.db.book.findUnique({
         where: { id: input.bookId },
@@ -124,7 +125,7 @@ export const bookRouter = createTRPCRouter({
       }
 
       // Then, use the appropriate method to add a chapter to the book
-      const updatedBook = await ctx.db.book.update({
+      const updatedBook: Book = await ctx.db.book.update({
         where: { id: input.bookId },
         data: {
           chapters: {
@@ -144,7 +145,13 @@ export const bookRouter = createTRPCRouter({
           },
         },
       });
+      const newChapter =
+        updatedBook.chapters?.[updatedBook.chapters.length - 1];
       // Return the updated book could this just be a chapter?
-      return updatedBook;
+      if (!newChapter) {
+        throw new Error("Chapter creation failed");
+      } else {
+        return newChapter;
+      }
     }),
 });

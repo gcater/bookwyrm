@@ -26,11 +26,13 @@ interface AutoChapterFormProps {
 
 const MyAutoForm = ({ bookId }: AutoChapterFormProps): JSX.Element => {
   const { mutate, data, isSuccess } = api.book.addChapter.useMutation({
-    onSuccess: (data: Book) => {
+    onSuccess: (data: Chapter) => {
       if (data && "id" in data) {
         // Type guard to ensure 'id' exists in data
         //setChapterId(data.id.toString());
-        console.log(data);
+        console.log(data.bookId);
+        console.log(data.id);
+        setChapterId(data.id ?? null);
       }
     },
   });
@@ -94,9 +96,9 @@ const MyAutoForm = ({ bookId }: AutoChapterFormProps): JSX.Element => {
             </p>
           </AutoForm>
         </CardContent>
-        {bookId && (
+        {chapterId && bookId && (
           <CardContent>
-            <a href={`/book/${bookId}/addChapter`} className="button-class">
+            <a href={`/book/${bookId}/${chapterId}/addSection`} className="button-class">
               Add Section
             </a>
           </CardContent>
