@@ -8,6 +8,7 @@ import { api } from "~/utils/api";
 import type { Book } from "~/server/api/routers/book";
 import React, { useState } from "react"; // Import useState
 import type { Chapter } from "~/server/api/routers/book";
+import type { Section } from "~/server/api/routers/book";
 const formSchema = z.object({
   title: z
     .string({
@@ -25,24 +26,15 @@ interface AutoChapterFormProps {
 
 const MyAutoForm = ({ bookId }: AutoChapterFormProps): JSX.Element => {
   const { mutate, data, isSuccess } = api.book.addChapter.useMutation({
-    onSuccess: (data: {
-      chapters: {
-        id: number;
-        title: string;
-        createdAt: Date;
-        updatedAt: Date;
-        bookId: number;
-      }[];
-      id: number;
-      createdAt: Date;
-      updatedAt: Date;
-      title: string;
-      author: string;
-      createdById: string;
-    }) => {
-      console.log(data);
+    onSuccess: (data: Book) => {
+      if (data && "id" in data) {
+        // Type guard to ensure 'id' exists in data
+        //setChapterId(data.id.toString());
+        console.log(data);
+      }
     },
   });
+  const [chapterId, setChapterId] = useState<string | null>(null); // State to store the book ID
 
   const handleSubmit = async ({ title }: { title: string }) => {
     console.log(title);
@@ -52,7 +44,8 @@ const MyAutoForm = ({ bookId }: AutoChapterFormProps): JSX.Element => {
         title, // Assuming this is the chapter title
         sections: [], // Assuming sections can be an empty array for now
       },
-      bookId: parseInt(bookId, 10), // Convert bookId from string to number, ensure bookId is not null before this operation
+      bookId,
+      //bookId: parseInt(bookId, 10), // Convert bookId from string to number, ensure bookId is not null before this operation
     });
   };
   return (

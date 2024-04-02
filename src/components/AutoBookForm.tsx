@@ -33,7 +33,7 @@ const MyAutoForm = (): JSX.Element => {
   const { mutate, data, isSuccess } = api.book.create.useMutation({
     onSuccess: (data: Book) => {
       console.log(data);
-      setBookId(data.id.toString()); // Convert number to string
+      setBookId(data.id);
     },
   });
   const [bookId, setBookId] = useState<string | null>(null); // State to store the book ID

@@ -2,20 +2,22 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "src/server/api/trpc";
 
 export interface Section {
+  id?: string;
   title: string;
   content: string;
 }
 
 export interface Chapter {
+  id?: string;
   title: string;
   sections: { title: string; content: string }[];
 }
 
 export interface Book {
-  id: number;
+  id: string;
   title: string;
   author: string;
-  chapters: Chapter[];
+  chapters?: Chapter[];
 }
 
 export const bookRouter = createTRPCRouter({
@@ -100,7 +102,7 @@ export const bookRouter = createTRPCRouter({
   addChapter: protectedProcedure
     .input(
       z.object({
-        bookId: z.number(),
+        bookId: z.string(),
         chapter: z.object({
           title: z.string().min(1, "Chapter title is required"),
           sections: z.array(
@@ -126,14 +128,23 @@ export const bookRouter = createTRPCRouter({
         where: { id: input.bookId },
         data: {
           chapters: {
-            create: { title: input.chapter.title, sections: {} }, // Assuming 'create' is the correct operation for your ORM
+            create: {
+              title: input.chapter.title,
+              sections: {
+                create: input.chapter.sections, // Ensure sections are correctly added
+              },
+            },
           },
         },
         include: {
-          chapters: true, // Include chapters in the response for verification or further use
+          chapters: {
+            include: {
+              sections: true, // Correctly nest 'sections' within 'chapters'
+            },
+          },
         },
       });
-
+      // Return the updated book could this just be a chapter?
       return updatedBook;
     }),
 });
