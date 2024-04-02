@@ -154,4 +154,43 @@ export const bookRouter = createTRPCRouter({
         return newChapter;
       }
     }),
+  // mutation to add a section to a chapter in a book
+  addSection: protectedProcedure
+    .input(
+      z.object({
+        bookId: z.string(),
+        chapterId: z.string(),
+        section: z.object({
+          title: z.string().min(1, "Section title is required"),
+          content: z.string().min(1, "Section content is required"),
+        }),
+      }),
+    )
+    .mutation(async ({ ctx, input }): Promise<Section> => {
+      // First, ensure the chapter exists within the book
+      const chapterExists = await ctx.db.chapter.findFirst({
+        where: {
+          id: input.chapterId,
+          bookId: input.bookId,
+        },
+      });
+      if (!chapterExists) {
+        throw new Error("Chapter not found in the specified book");
+      }
+
+      // Then, add the new section to the chapter
+      const newSection = await ctx.db.section.create({
+        data: {
+          title: input.section.title,
+          content: input.section.content,
+          chapterId: input.chapterId,
+        },
+      });
+
+      if (!newSection) {
+        throw new Error("Section creation failed");
+      } else {
+        return newSection;
+      }
+    }),
 });

@@ -47,6 +47,7 @@ export function ShadCard({ className, ...props }: CardProps) {
                 >
                   <CardContent>
                     <p>{section.title}</p>
+                    <p>{section.content}</p>
                   </CardContent>
                 </Card>
               ))}

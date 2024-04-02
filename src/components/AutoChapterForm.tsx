@@ -96,7 +96,7 @@ const MyAutoForm = ({ bookId }: AutoChapterFormProps): JSX.Element => {
             </p>
           </AutoForm>
         </CardContent>
-        {chapterId && bookId && (
+          {chapterId && bookId && (
           <CardContent>
             <a href={`/book/${bookId}/${chapterId}/addSection`} className="button-class">
               Add Section
