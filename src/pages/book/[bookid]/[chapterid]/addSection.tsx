@@ -43,7 +43,7 @@ export default function AddSectionPage() {
             <AutoSectionForm bookId={bookid as string} chapterId={chapterid as string} />
           </div>
           <div className="w-1/2">
-            <BookRender />
+            <BookRender bookid={bookid as string} />
           </div>
         </div>
       </main>

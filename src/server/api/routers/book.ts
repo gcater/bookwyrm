@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "src/server/api/trpc";
+import { TRPCError } from "@trpc/server";
 
 export interface Section {
   id?: string;
@@ -70,6 +71,37 @@ export const bookRouter = createTRPCRouter({
 
       return book;
     }),
+  getBook: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
+    const book = await ctx.db.book.findUnique({
+      where: { id: input },
+      include: {
+        chapters: {
+          include: {
+            sections: true,
+          },
+        },
+      },
+    });
+    if (!book) {
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: `No book found with id ${input}`,
+      });
+    }
+    return book;
+  }),
+  updateBook : protectedProcedure.input(z.object({
+    id: z.string(),
+    title: z.string(),
+    author: z.string(),
+  })).mutation(async ({ ctx, input }) => {
+    const updatedBook = await ctx.db.book.update({
+      where: { id: input.id },
+      data: { title: input.title, author: input.author },
+    });
+    return updatedBook;
+  }),
+
 
   delete: protectedProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
     // Assuming 'input' is the ID of the book to delete

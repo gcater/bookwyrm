@@ -38,10 +38,10 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="flex w-full">
+        
           <div className="w-1/2">{AutoBookForm()}</div>
-          <div className="w-1/2">{BookRender()}</div>
-        </div>
+          {/* <div className="w-1/2">{BookRender()}</div> */}
+      
       </main>
     </>
   );

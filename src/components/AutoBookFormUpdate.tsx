@@ -7,7 +7,12 @@ import { Button } from "@/components/ui/button";
 import { api } from "~/utils/api";
 import type { Book } from "~/server/api/routers/book";
 import React, { useState } from "react"; // Import useState
-import { useRouter } from "next/router";
+
+
+interface AutoBookFormUpdateProps {
+    bookId: string;
+  }
+
 const formSchema = z.object({
   title: z
     .string({
@@ -30,16 +35,17 @@ const formSchema = z.object({
     }),
 });
 
-const MyAutoForm = (): JSX.Element => {
-  const router = useRouter();
-  const { mutate, data, isSuccess } = api.book.create.useMutation({
-    onSuccess: (data: Book) => {
-      console.log(data);
-      setBookId(data.id);
-      router.push(`/book/${data.id}`);
-    },
-  });
-  const [bookId, setBookId] = useState<string | null>(null); // State to store the book ID
+const MyAutoFormUpdate = ({bookid}: {bookid: string}): JSX.Element => {
+    const {data: queryData} = api.book.getBook.useQuery(bookid);
+    console.log(queryData);
+    const { mutate, data, isSuccess } = api.book.updateBook.useMutation({
+        onSuccess: (data: Book) => {
+            console.log(data);
+            window.location.reload();
+       
+        },
+    });
+//   const [bookId, setBookId] = useState<string | null>(null); // State to store the book ID
 
   const handleSubmit = async ({
     title,
@@ -49,7 +55,7 @@ const MyAutoForm = (): JSX.Element => {
     author: string;
   }) => {
     console.log(title, author);
-    mutate({ title, author, chapters: [] });
+    mutate({ id: bookid, title, author});
     //console.log(data?.id);
   };
   return (
@@ -64,7 +70,21 @@ const MyAutoForm = (): JSX.Element => {
             formSchema={formSchema}
             // You can add additional config for each field
             // to customize the UI
-            fieldConfig={{}}
+            values={{ title: queryData?.title, author: queryData?.author }}
+            fieldConfig={{
+                title: {
+                    inputProps: {
+                        type: "text",
+                        defaultValue: queryData?.title,
+                    },
+                },
+                author: {
+                    inputProps: {
+                        type: "text",
+                        defaultValue: queryData?.author,
+                    },
+                },
+            }}
             // Optionally, define dependencies between fields
             // dependencies={[
             //   {
@@ -83,7 +103,7 @@ const MyAutoForm = (): JSX.Element => {
       Alternatively, you can not pass a submit button
       to create auto-saving forms etc.
       */}
-            <Button type="submit">Send now</Button>
+            <Button type="submit">Update Book</Button>
             {/* <AutoFormSubmit>Send now</AutoFormSubmit> */}
 
             {/*
@@ -92,10 +112,10 @@ const MyAutoForm = (): JSX.Element => {
            
           </AutoForm>
         </CardContent>
-        {bookId && (
+        {bookid && (
           <>
             <CardContent>
-              <a href={`/book/${bookId}/addChapter`} className="button-class">
+              <a href={`/book/${bookid}/addChapter`} className="button-class">
                 Add Chapter
               </a>
             </CardContent>
@@ -103,7 +123,7 @@ const MyAutoForm = (): JSX.Element => {
               <Button
                 onClick={() => {
                   if (window.confirm("Are you sure you want to delete this book?")) {
-                    api.book.delete.useMutation().mutate(bookId, {
+                    api.book.delete.useMutation().mutate(bookid, {
                       onSuccess: () => {
                         alert("Book deleted successfully.");
                         // Redirect or update UI accordingly
@@ -125,5 +145,5 @@ const MyAutoForm = (): JSX.Element => {
   );
 };
 
-export default MyAutoForm;
+export default MyAutoFormUpdate;
 
