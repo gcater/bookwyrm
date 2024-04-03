@@ -91,7 +91,6 @@ model Chapter {
     updatedAt DateTime @updatedAt
 
     title    String
-    content  String
     sections Section[]
     book     Book      @relation(fields: [bookId], references: [id])
     bookId   String

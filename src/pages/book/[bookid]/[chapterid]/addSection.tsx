@@ -2,11 +2,11 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
-
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import { api } from "~/utils/api";
 import { z } from "zod";
 import { useForm, useFieldArray, Controller, Control } from "react-hook-form";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -21,10 +21,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import BookForm from "@/components/BookForm";
 import BookRender from "@/components/BookRender";
 import AutoBookForm from "~/components/AutoBookForm";
-
-export default function Home() {
-  const hello = api.post.hello.useQuery({ text: "from tRPC" });
-
+import AutoChapterForm from "~/components/AutoChapterForm";
+import AutoSectionForm from "~/components/AutoSectionForm";
+export default function AddSectionPage() {
+  const router = useRouter();
+  const { bookid, chapterid } = router.query; // `bookid` matches the dynamic segment name
+ 
   return (
     <>
       <Head>
@@ -34,39 +36,17 @@ export default function Home() {
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center">
         <div className="container flex w-full flex-col items-center justify-center gap-12 px-4 py-16">
-          <div className="flex w-full flex-col items-center gap-2">
-            <AuthShowcase />
-          </div>
+          <div className="flex w-full flex-col items-center gap-2"></div>
         </div>
-
         <div className="flex w-full">
-          <div className="w-1/2">{AutoBookForm()}</div>
-          <div className="w-1/2">{BookRender()}</div>
+          <div className="w-1/2">
+            <AutoSectionForm bookId={bookid as string} chapterId={chapterid as string} />
+          </div>
+          <div className="w-1/2">
+            <BookRender />
+          </div>
         </div>
       </main>
     </>
-  );
-}
-
-function AuthShowcase() {
-  const { data: sessionData } = useSession();
-
-  const { data: secretMessage } = api.post.getSecretMessage.useQuery(
-    undefined, // no input
-    { enabled: sessionData?.user !== undefined },
-  );
-  return (
-    <div className="flex flex-col items-center justify-center gap-4">
-      <p className="text-center text-2xl text-black">
-        {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
-        {secretMessage && <span> - {secretMessage}</span>}
-      </p>
-      <button
-        className="rounded-full bg-white/10 px-10 py-3 font-semibold text-black no-underline transition hover:bg-white/20"
-        onClick={sessionData ? () => void signOut() : () => void signIn()}
-      >
-        {sessionData ? "Sign out" : "Sign in"}
-      </button>
-    </div>
   );
 }
