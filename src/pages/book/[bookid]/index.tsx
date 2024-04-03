@@ -18,8 +18,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import BookForm from "@/components/BookForm";
-import BookRender from "@/components/BookRender";
+import BookForm from "~/components/BookForm";
+import BookRender from "~/components/BookRender";
 import AutoBookForm from "~/components/AutoBookForm";
 import AutoChapterForm from "~/components/AutoChapterForm";
 
