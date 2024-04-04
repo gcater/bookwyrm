@@ -71,17 +71,6 @@ const MyAutoForm = ({
             // to customize the UI
             values={{ title: chapter.title }}
             fieldConfig={{}}
-            // Optionally, define dependencies between fields
-            // dependencies={[
-            //   {
-            //     // Hide "color" when "sendMeMails" is not checked as we only need to
-            //     // know the color when we send mails
-            //     sourceField: "",
-            //     type: DependencyType.HIDES,
-            //     targetField: "color",
-            //     when: (sendMeMails) => !sendMeMails,
-            //   },
-            // ]}
             onSubmit={handleSubmit}
           >
             {/* 
@@ -104,10 +93,10 @@ const MyAutoForm = ({
             </p>
           </AutoForm>
         </CardContent>
-        {chapterId && bookId && (
+        {chapter.id && bookId && (
           <CardContent>
             <a
-              href={`/book/${bookId}/${chapterId}/addSection`}
+              href={`/book/${bookId}/${chapter.id}/addSection`}
               className="button-class"
             >
               Add Section

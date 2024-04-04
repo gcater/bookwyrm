@@ -22,13 +22,9 @@ const formSchema = z.object({
 
 interface AutoChapterFormProps {
   bookId: string;
-  onAddChapter?: (chapter: Chapter) => void;
 }
 
-const MyAutoForm = ({
-  bookId,
-  onAddChapter,
-}: AutoChapterFormProps): JSX.Element => {
+const MyAutoForm = ({ bookId }: AutoChapterFormProps): JSX.Element => {
   const { mutate, data, isSuccess } = api.book.addChapter.useMutation({
     onSuccess: (data: Chapter) => {
       if (data && "id" in data) {
@@ -37,7 +33,6 @@ const MyAutoForm = ({
         console.log(data.bookId);
         console.log(data.id);
         setChapterId(data.id ?? null);
-        onAddChapter?.(data);
         window.location.reload();
       }
     },

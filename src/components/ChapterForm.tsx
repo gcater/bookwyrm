@@ -5,12 +5,6 @@ import type { Chapter } from "~/server/api/routers/book";
 import { api } from "~/utils/api";
 
 const ChapterForm = ({ bookId }: { bookId: string }) => {
-  const [chapters, setChapters] = useState<Chapter[]>([]);
-
-  const addChapter = (newChapter: Chapter) => {
-    setChapters([...chapters, newChapter]);
-  };
-
   const { data: queryData } = api.book.getChapters.useQuery(bookId);
   return (
     <div>
@@ -25,7 +19,7 @@ const ChapterForm = ({ bookId }: { bookId: string }) => {
             bookId={bookId}
           />
         ))}
-        <AutoChapterForm bookId={bookId} onAddChapter={addChapter} />
+        <AutoChapterForm bookId={bookId} />
       </div>
     </div>
   );

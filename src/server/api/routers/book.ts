@@ -286,4 +286,65 @@ export const bookRouter = createTRPCRouter({
         return newSection;
       }
     }),
+
+  getSections: protectedProcedure
+    .input(
+      z.object({
+        bookId: z.string(),
+        chapterId: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const sections = await ctx.db.section.findMany({
+        // where: {
+        //   chapterId: input.chapterId,
+        //   chapter: {
+        //     bookId: input.bookId,
+        //   },
+        // },
+      });
+      return sections;
+    }),
+  updateSection: protectedProcedure
+    .input(
+      z.object({
+        sectionId: z.string(),
+        bookId: z.string(),
+        chapterId: z.string(),
+        section: z.object({
+          title: z.string(),
+          content: z.string(),
+        }),
+      }),
+    )
+    .mutation(async ({ ctx, input }): Promise<Section> => {
+      // First, ensure the chapter exists within the book using findUnique
+      const chapterExists = await ctx.db.chapter.findUnique({
+        where: {
+          id: input.chapterId,
+          // Since findUnique does not directly support checking across relations,
+          // we need to ensure the chapter belongs to the correct book in a separate step if necessary.
+        },
+      });
+      if (!chapterExists || chapterExists.bookId !== input.bookId) {
+        throw new Error("Chapter not found in the specified book");
+      }
+
+      // Then, update the section
+      const updatedSection = await ctx.db.section.update({
+        where: {
+          id: input.sectionId,
+        },
+        data: {
+          title: input.section.title,
+          content: input.section.content,
+        },
+      });
+
+      if (!updatedSection) {
+        throw new Error("Section update failed");
+      } else {
+        return updatedSection;
+      }
+    }),
 });

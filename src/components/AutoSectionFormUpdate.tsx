@@ -7,9 +7,10 @@ import { Button } from "./ui/button";
 import { api } from "~/utils/api";
 import { Section } from "~/server/api/routers/book";
 
-interface AutoSectionFormProps {
+interface AutoSectionFormUpdateProps {
   bookId: string;
   chapterId: string;
+  section: Section;
 }
 
 const formSchema = z.object({
@@ -30,15 +31,18 @@ const formSchema = z.object({
 const MyAutoForm = ({
   bookId,
   chapterId,
-}: AutoSectionFormProps): JSX.Element => {
-  const { mutate, data, isSuccess } = api.book.addSection.useMutation({
+  section,
+}: AutoSectionFormUpdateProps): JSX.Element => {
+  const { mutate, data, isSuccess } = api.book.updateSection.useMutation({
     onSuccess: (data: Section) => {
       if (data && "id" in data) {
         window.location.reload();
       }
     },
   });
-
+  if (typeof section?.id === "undefined") {
+    throw new Error("Section ID is undefined");
+  }
   function handleSubmit(values: { title: string; content: string }): void {
     mutate({
       section: {
@@ -47,6 +51,7 @@ const MyAutoForm = ({
       },
       bookId,
       chapterId,
+      sectionId: section?.id ?? "",
     });
   }
 
@@ -54,7 +59,7 @@ const MyAutoForm = ({
     <div className="p-6">
       <Card>
         <CardHeader>
-          <CardTitle>Section Form</CardTitle>
+          <CardTitle>{section.title}</CardTitle>
         </CardHeader>
         <CardContent>
           <AutoForm

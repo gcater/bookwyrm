@@ -22,11 +22,11 @@ import BookForm from "@/components/BookForm";
 import BookRender from "@/components/BookRender";
 import AutoBookForm from "~/components/AutoBookForm";
 import AutoChapterForm from "~/components/AutoChapterForm";
-import AutoSectionForm from "~/components/AutoSectionForm";
+import SectionForm from "~/components/AutoSectionForm";
 export default function AddSectionPage() {
   const router = useRouter();
   const { bookid, chapterid } = router.query; // `bookid` matches the dynamic segment name
- 
+
   return (
     <>
       <Head>
@@ -40,7 +40,10 @@ export default function AddSectionPage() {
         </div>
         <div className="flex w-full">
           <div className="w-1/2">
-            <AutoSectionForm bookId={bookid as string} chapterId={chapterid as string} />
+            <SectionForm
+              bookId={bookid as string}
+              chapterId={chapterid as string}
+            />
           </div>
           <div className="w-1/2">
             <BookRender bookid={bookid as string} />
