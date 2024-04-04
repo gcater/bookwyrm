@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button";
 import { api } from "~/utils/api";
 import type { Book } from "~/server/api/routers/book";
 import React, { useState } from "react"; // Import useState
-import { useRouter } from "next/router";
+import type { Chapter } from "~/server/api/routers/book";
+import type { Section } from "~/server/api/routers/book";
 const formSchema = z.object({
   title: z
     .string({
@@ -17,46 +18,50 @@ const formSchema = z.object({
     .min(2, {
       message: "Title must be at least 2 characters.",
     }),
-
-  author: z
-    .string({
-      required_error: "Author is required.",
-    })
-    // Use the "describe" method to set the label
-    // If no label is set, the field name will be used
-    // and un-camel-cased
-    .min(2, {
-      message: "Author must be at least 2 characters.",
-    }),
 });
 
-const MyAutoForm = (): JSX.Element => {
-  const router = useRouter();
-  const { mutate, data, isSuccess } = api.book.create.useMutation({
-    onSuccess: (data: Book) => {
-      console.log(data);
-      setBookId(data.id);
-      void router.push(`/book/${data.id}`);
+interface AutoChapterFormUpdateProps {
+  chapter: Chapter;
+  bookId: string;
+}
+
+const MyAutoForm = ({
+  bookId,
+  chapter,
+}: AutoChapterFormUpdateProps): JSX.Element => {
+  const { mutate, data, isSuccess } = api.book.updateChapter.useMutation({
+    onSuccess: (data: Chapter) => {
+      if (data && "id" in data) {
+        // Type guard to ensure 'id' exists in data
+        //setChapterId(data.id.toString());
+        console.log(data.bookId);
+        console.log(data.id);
+        setChapterId(data.id ?? null);
+        chapter = data;
+        window.location.reload();
+      }
     },
   });
-  const [bookId, setBookId] = useState<string | null>(null); // State to store the book ID
+  const [chapterId, setChapterId] = useState<string | null>(null); // State to store the book ID
 
-  const handleSubmit = async ({
-    title,
-    author,
-  }: {
-    title: string;
-    author: string;
-  }) => {
-    console.log(title, author);
-    mutate({ title, author, chapters: [] });
-    //console.log(data?.id);
+  const handleSubmit = async ({ title }: { title: string }) => {
+    console.log(title);
+    // Adjust the object to match the expected shape
+    if (typeof chapter.id === "undefined") {
+      throw new Error("Chapter ID is undefined");
+    }
+    mutate({
+      id: chapter.id ?? "",
+      title, // Directly use title here
+      sections: [], // Directly use sections here
+      bookId,
+    });
   };
   return (
     <div className="p-6">
       <Card>
         <CardHeader>
-          <CardTitle>Book Form</CardTitle>
+          <CardTitle>{chapter.title}</CardTitle>
         </CardHeader>
         <CardContent>
           <AutoForm
@@ -64,6 +69,7 @@ const MyAutoForm = (): JSX.Element => {
             formSchema={formSchema}
             // You can add additional config for each field
             // to customize the UI
+            values={{ title: chapter.title }}
             fieldConfig={{}}
             // Optionally, define dependencies between fields
             // dependencies={[
@@ -89,37 +95,24 @@ const MyAutoForm = (): JSX.Element => {
             {/*
       All children passed to the form will be rendered below the form.
       */}
+            <p className="text-sm text-gray-500">
+              By submitting this form, you agree to our{" "}
+              <a href="#" className="text-primary underline">
+                terms and conditions
+              </a>
+              .
+            </p>
           </AutoForm>
         </CardContent>
-        {bookId && (
-          <>
-            <CardContent>
-              <a href={`/book/${bookId}/addChapter`} className="button-class">
-                Add Chapter
-              </a>
-            </CardContent>
-            <CardContent>
-              <Button
-                onClick={() => {
-                  if (
-                    window.confirm("Are you sure you want to delete this book?")
-                  ) {
-                    api.book.delete.useMutation().mutate(bookId, {
-                      onSuccess: () => {
-                        alert("Book deleted successfully.");
-                        // Redirect or update UI accordingly
-                      },
-                      onError: (error) => {
-                        alert(`Error deleting book: ${error.message}`);
-                      },
-                    });
-                  }
-                }}
-              >
-                Delete Book
-              </Button>
-            </CardContent>
-          </>
+        {chapterId && bookId && (
+          <CardContent>
+            <a
+              href={`/book/${bookId}/${chapterId}/addSection`}
+              className="button-class"
+            >
+              Add Section
+            </a>
+          </CardContent>
         )}
       </Card>
     </div>

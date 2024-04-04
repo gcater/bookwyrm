@@ -71,45 +71,52 @@ export const bookRouter = createTRPCRouter({
 
       return book;
     }),
-  getBook: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
-    const book = await ctx.db.book.findUnique({
-      where: { id: input },
-      include: {
-        chapters: {
-          include: {
-            sections: true,
+  getBook: protectedProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      const book = await ctx.db.book.findUnique({
+        where: { id: input },
+        include: {
+          chapters: {
+            include: {
+              sections: true,
+            },
           },
         },
-      },
-    });
-    if (!book) {
-      throw new TRPCError({
-        code: 'NOT_FOUND',
-        message: `No book found with id ${input}`,
       });
-    }
-    return book;
-  }),
-  updateBook : protectedProcedure.input(z.object({
-    id: z.string(),
-    title: z.string(),
-    author: z.string(),
-  })).mutation(async ({ ctx, input }) => {
-    const updatedBook = await ctx.db.book.update({
-      where: { id: input.id },
-      data: { title: input.title, author: input.author },
-    });
-    return updatedBook;
-  }),
+      if (!book) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: `No book found with id ${input}`,
+        });
+      }
+      return book;
+    }),
+  updateBook: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        title: z.string(),
+        author: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const updatedBook = await ctx.db.book.update({
+        where: { id: input.id },
+        data: { title: input.title, author: input.author },
+      });
+      return updatedBook;
+    }),
 
-
-  delete: protectedProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
-    // Assuming 'input' is the ID of the book to delete
-    const deletedBook = await ctx.db.book.delete({
-      where: { id: input },
-    });
-    return deletedBook;
-  }),
+  delete: protectedProcedure
+    .input(z.string())
+    .mutation(async ({ ctx, input }) => {
+      // Assuming 'input' is the ID of the book to delete
+      const deletedBook = await ctx.db.book.delete({
+        where: { id: input },
+      });
+      return deletedBook;
+    }),
   getAll: protectedProcedure.query(async ({ ctx }) => {
     // Fetch all books created by the current user, including their chapters and sections
     const books = await ctx.db.book.findMany({
@@ -192,6 +199,53 @@ export const bookRouter = createTRPCRouter({
       } else {
         return newChapter;
       }
+    }),
+  updateChapter: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        title: z.string(),
+        sections: z.array(
+          z.object({
+            id: z.string().optional(),
+            title: z.string(),
+            content: z.string(),
+          }),
+        ),
+        bookId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }): Promise<Chapter> => {
+      const updatedChapter = await ctx.db.chapter.update({
+        where: { id: input.id },
+        data: {
+          title: input.title,
+          sections: {
+            upsert: input.sections.map((section) => ({
+              where: { id: section.id ?? undefined },
+              update: { title: section.title, content: section.content },
+              create: { title: section.title, content: section.content },
+            })),
+          },
+        },
+        include: { sections: true },
+      });
+      return updatedChapter;
+    }),
+  getChapter: protectedProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      const chapter = await ctx.db.chapter.findUnique({ where: { id: input } });
+      return chapter;
+    }),
+  getChapters: protectedProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      const chapters = await ctx.db.chapter.findMany({
+        where: { bookId: input },
+        include: { sections: true },
+      });
+      return chapters;
     }),
   // mutation to add a section to a chapter in a book
   addSection: protectedProcedure
