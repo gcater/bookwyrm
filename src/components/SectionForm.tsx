@@ -18,23 +18,21 @@ const SectionForm = ({
   });
 
   return (
-    queryData && ( // Ensure queryData is not null
+    <div>
+      {/* Pass addChapter to AutoChapterForm so it can add a new chapter */}
       <div>
-        {/* Pass addChapter to AutoChapterForm so it can add a new chapter */}
-        <div>
-          {/* This could be a table or any layout you prefer */}
-          {queryData?.map((section) => (
-            <AutoSectionFormUpdate
-              key={section.id}
-              bookId={bookId}
-              chapterId={chapterId}
-              section={section}
-            />
-          ))}
-          <AutoSectionForm bookId={bookId} chapterId={chapterId} />
-        </div>
+        {/* This could be a table or any layout you prefer */}
+        {queryData?.map((section) => (
+          <AutoSectionFormUpdate
+            key={section.id}
+            bookId={bookId}
+            chapterId={chapterId}
+            section={section}
+          />
+        ))}
+        <AutoSectionForm bookId={bookId} chapterId={chapterId} />
       </div>
-    )
+    </div>
   );
 };
 

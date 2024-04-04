@@ -296,12 +296,12 @@ export const bookRouter = createTRPCRouter({
     )
     .query(async ({ ctx, input }) => {
       const sections = await ctx.db.section.findMany({
-        // where: {
-        //   chapterId: input.chapterId,
-        //   chapter: {
-        //     bookId: input.bookId,
-        //   },
-        // },
+        where: {
+          chapterId: input.chapterId,
+          chapter: {
+            bookId: input.bookId,
+          },
+        },
       });
       return sections;
     }),

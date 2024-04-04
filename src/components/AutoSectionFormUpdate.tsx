@@ -65,6 +65,7 @@ const MyAutoForm = ({
           <AutoForm
             // Pass the schema to the form
             formSchema={formSchema}
+            values={{ title: section.title, content: section.content }}
             onSubmit={handleSubmit}
           >
             {/* 

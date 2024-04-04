@@ -22,7 +22,7 @@ import BookForm from "@/components/BookForm";
 import BookRender from "@/components/BookRender";
 import AutoBookForm from "~/components/AutoBookForm";
 import AutoChapterForm from "~/components/AutoChapterForm";
-import SectionForm from "~/components/AutoSectionForm";
+import SectionForm from "~/components/SectionForm";
 export default function AddSectionPage() {
   const router = useRouter();
   const { bookid, chapterid } = router.query; // `bookid` matches the dynamic segment name
