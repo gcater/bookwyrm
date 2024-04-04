@@ -78,7 +78,7 @@ const MyAutoForm = ({
       Alternatively, you can not pass a submit button
       to create auto-saving forms etc.
       */}
-            <Button type="submit">Send now</Button>
+            <Button type="submit">Update Chapter</Button>
             {/* <AutoFormSubmit>Send now</AutoFormSubmit> */}
 
             {/*

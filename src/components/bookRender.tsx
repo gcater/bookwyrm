@@ -16,19 +16,17 @@ type CardProps = React.ComponentProps<typeof Card>;
 
 type ExtendedCardProps = CardProps & { bookid: string };
 
-
-const BookRender = ({bookid}: {bookid: string}): JSX.Element => {
-  return ShadCard({bookid});
+const BookRender = ({ bookid }: { bookid: string }): JSX.Element => {
+  return ShadCard({ bookid });
 };
 
-export function ShadCard({bookid, className, ...props }: ExtendedCardProps) {
+export function ShadCard({ bookid, className, ...props }: ExtendedCardProps) {
   const { data: book, isLoading } = api.book.getBook.useQuery(bookid);
 
   if (isLoading) return <div>Loading...</div>;
   if (!book) return <div>No books found</div>;
 
   return (
-  
     //book with dynamic chapters and sections
     <div>
       <Card className={cn("mb-4", className)} {...props}>
@@ -39,25 +37,36 @@ export function ShadCard({bookid, className, ...props }: ExtendedCardProps) {
       </Card>
       {book.chapters &&
         book.chapters.length > 0 &&
-        book.chapters.map((chapter, chapterIndex) => (
-          <div key={chapterIndex} className="mb-4">
-            <h3 className="mb-2 text-lg font-semibold">{chapter.title}</h3>
-            {chapter.sections &&
-              chapter.sections.length > 0 &&
-              chapter.sections.map((section, sectionIndex) => (
-                <Card
-                  key={sectionIndex}
-                  className={cn("mb-2", className)}
-                  {...props}
-                >
-                  <CardContent>
-                    <p>{section.title}</p>
-                    <p>{section.content}</p>
-                  </CardContent>
-                </Card>
-              ))}
-          </div>
-        ))}
+        [...book.chapters]
+          .sort(
+            (a, b) =>
+              new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+          )
+          .map((chapter, chapterIndex) => (
+            <div key={chapterIndex} className="mb-4">
+              <h3 className="mb-2 text-lg font-semibold">{chapter.title}</h3>
+              {chapter.sections &&
+                chapter.sections.length > 0 &&
+                [...chapter.sections]
+                  .sort(
+                    (a, b) =>
+                      new Date(a.createdAt).getTime() -
+                      new Date(b.createdAt).getTime(),
+                  )
+                  .map((section, sectionIndex) => (
+                    <Card
+                      key={sectionIndex}
+                      className={cn("mb-2", className)}
+                      {...props}
+                    >
+                      <CardContent>
+                        <p>{section.title}</p>
+                        <p>{section.content}</p>
+                      </CardContent>
+                    </Card>
+                  ))}
+            </div>
+          ))}
     </div>
   );
 }

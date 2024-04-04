@@ -22,14 +22,19 @@ const SectionForm = ({
       {/* Pass addChapter to AutoChapterForm so it can add a new chapter */}
       <div>
         {/* This could be a table or any layout you prefer */}
-        {queryData?.map((section) => (
-          <AutoSectionFormUpdate
-            key={section.id}
-            bookId={bookId}
-            chapterId={chapterId}
-            section={section}
-          />
-        ))}
+        {queryData
+          ?.sort(
+            (a, b) =>
+              new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+          )
+          .map((section) => (
+            <AutoSectionFormUpdate
+              key={section.id}
+              bookId={bookId}
+              chapterId={chapterId}
+              section={section}
+            />
+          ))}
         <AutoSectionForm bookId={bookId} chapterId={chapterId} />
       </div>
     </div>
