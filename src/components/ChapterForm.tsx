@@ -1,7 +1,5 @@
-import React, { useState } from "react";
 import AutoChapterForm from "./AutoChapterForm";
 import AutoChapterFormUpdate from "./AutoChapterFormUpdate";
-import type { Chapter } from "~/server/api/routers/book";
 import { api } from "~/utils/api";
 
 const ChapterForm = ({ bookId }: { bookId: string }) => {

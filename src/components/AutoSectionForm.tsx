@@ -1,11 +1,10 @@
 "use client";
-import AutoForm, { AutoFormSubmit } from "@/components/ui/auto-form";
 import * as z from "zod";
-import { DependencyType } from "./ui/auto-form/types";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { api } from "~/utils/api";
-import { Section } from "~/server/api/routers/book";
+import type { Section } from "~/server/api/routers/book";
+import AutoForm from "./ui/auto-form";
 
 interface AutoSectionFormProps {
   bookId: string;
@@ -31,7 +30,7 @@ const MyAutoForm = ({
   bookId,
   chapterId,
 }: AutoSectionFormProps): JSX.Element => {
-  const { mutate, data, isSuccess } = api.book.addSection.useMutation({
+  const { mutate } = api.book.addSection.useMutation({
     onSuccess: (data: Section) => {
       if (data && "id" in data) {
         window.location.reload();

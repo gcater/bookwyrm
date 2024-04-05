@@ -1,9 +1,7 @@
-import React, { useState } from "react";
 import AutoSectionForm from "./AutoSectionForm";
 import AutoSectionFormUpdate from "./AutoSectionFormUpdate";
 
 import { api } from "~/utils/api";
-import type { Section } from "~/server/api/routers/book";
 
 const SectionForm = ({
   bookId,

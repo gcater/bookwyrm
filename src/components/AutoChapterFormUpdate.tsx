@@ -3,7 +3,6 @@ import * as z from "zod";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "@/components/ui/button";
 import { api } from "~/utils/api";
-import React, { useState } from "react"; // Import useState
 import type { Chapter } from "~/server/api/routers/book";
 import AutoForm from "./ui/auto-form";
 const formSchema = z.object({

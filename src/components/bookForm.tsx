@@ -1,25 +1,11 @@
 "use client";
-import { signIn, signOut, useSession } from "next-auth/react";
-import Head from "next/head";
-import Link from "next/link";
-import { useState, useEffect } from "react";
 
 import { api } from "~/utils/api";
 import { z } from "zod";
-import { useForm, useFieldArray, Controller, Control } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
+import type { Control } from "react-hook-form";
 
-import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { Chapter } from "src/server/api/routers/book";
 
 const formSchema = z.object({
   author: z.string().min(2, "Author must be at least 2 characters."),

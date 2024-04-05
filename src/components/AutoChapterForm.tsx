@@ -1,14 +1,13 @@
 "use client";
-import AutoForm, { AutoFormSubmit } from "@/components/ui/auto-form";
+
 import * as z from "zod";
-import { DependencyType } from "./ui/auto-form/types";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "@/components/ui/button";
 import { api } from "~/utils/api";
-import type { Book } from "~/server/api/routers/book";
 import React, { useState } from "react"; // Import useState
 import type { Chapter } from "~/server/api/routers/book";
-import type { Section } from "~/server/api/routers/book";
+import AutoForm from "./ui/auto-form";
+
 const formSchema = z.object({
   title: z
     .string({

@@ -24,6 +24,9 @@ export const INPUT_COMPONENTS = {
  * Define handlers for specific Zod types.
  * You can expand this object to support more types.
  */
+{
+  /* eslint-disable-next-line @typescript-eslint/no-unsafe-member-access */
+}
 export const DEFAULT_ZOD_HANDLERS: {
   [key: string]: keyof typeof INPUT_COMPONENTS;
 } = {
