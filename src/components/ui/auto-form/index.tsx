@@ -1,21 +1,18 @@
 "use client";
 import { Form } from "@/components/ui/form";
 import React from "react";
-import { DefaultValues, useForm } from "react-hook-form";
-import { z } from "zod";
+import type { DefaultValues } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import type { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import AutoFormObject from "./fields/object";
-import { Dependency, FieldConfig } from "./types";
-import {
-  ZodObjectOrWrapped,
-  getDefaultValues,
-  getObjectFormSchema,
-} from "./utils";
-
+import type { Dependency, FieldConfig } from "./types";
+import { getDefaultValues, getObjectFormSchema } from "./utils";
+import type { ZodObjectOrWrapped } from "./utils";
 export function AutoFormSubmit({
   children,
   className,
@@ -80,14 +77,26 @@ function AutoForm<SchemaType extends ZodObjectOrWrapped>({
     if (parsedValues.success) {
       onParsedValuesChange?.(parsedValues.data);
     }
-  }, [valuesString]);
+  }, [
+    valuesString,
+    formSchema,
+    onParsedValuesChange,
+    onValuesChangeProp,
+    values,
+  ]); // Added missing dependencies
 
   return (
     <div className="w-full">
       <Form {...form}>
         <form
-          onSubmit={(e) => {
-            form.handleSubmit(onSubmit)(e);
+          onSubmit={async (e) => {
+            e.preventDefault(); // Prevent default form submission
+            await form
+              .handleSubmit(onSubmit)(e)
+              .catch((error) => {
+                console.error("Form submission error:", error);
+                // Handle the
+              });
           }}
           className={cn("space-y-5", className)}
         >

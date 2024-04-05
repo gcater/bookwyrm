@@ -1,25 +1,9 @@
 "use client";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
-import Link from "next/link";
-import { useState, useEffect } from "react";
 
 import { api } from "~/utils/api";
-import { z } from "zod";
-import { useForm, useFieldArray, Controller, Control } from "react-hook-form";
 
-import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import BookForm from "@/components/BookForm";
 import BookRender from "@/components/BookRender";
 import AutoBookFormUpdate from "~/components/AutoBookFormUpdate";
 import { useRouter } from "next/router";
@@ -42,8 +26,12 @@ export default function Home() {
         </div>
 
         <div className="flex w-full">
-          <div className="w-1/2">{typeof bookid === 'string' ? AutoBookFormUpdate({bookid}) : null}</div>
-          <div className="w-1/2">{typeof bookid === 'string' ? BookRender({bookid}) : null}</div>
+          <div className="w-1/2">
+            {typeof bookid === "string" ? AutoBookFormUpdate({ bookid }) : null}
+          </div>
+          <div className="w-1/2">
+            {typeof bookid === "string" ? BookRender({ bookid }) : null}
+          </div>
         </div>
       </main>
     </>

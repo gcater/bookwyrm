@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 export default function NetworkState() {
   return (
     <div className="m-0 flex flex-grow flex-col p-0 sm:ml-[90px] sm:pl-[250px] sm:pr-[10px]">
