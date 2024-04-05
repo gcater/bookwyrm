@@ -1,14 +1,11 @@
 "use client";
-import AutoForm, { AutoFormSubmit } from "@/components/ui/auto-form";
 import * as z from "zod";
-import { DependencyType } from "./ui/auto-form/types";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "@/components/ui/button";
 import { api } from "~/utils/api";
-import type { Book } from "~/server/api/routers/book";
 import React, { useState } from "react"; // Import useState
 import type { Chapter } from "~/server/api/routers/book";
-import type { Section } from "~/server/api/routers/book";
+import AutoForm from "./ui/auto-form";
 const formSchema = z.object({
   title: z
     .string({
@@ -29,20 +26,19 @@ const MyAutoForm = ({
   bookId,
   chapter,
 }: AutoChapterFormUpdateProps): JSX.Element => {
-  const { mutate, data, isSuccess } = api.book.updateChapter.useMutation({
+  const { mutate } = api.book.updateChapter.useMutation({
     onSuccess: (data: Chapter) => {
       if (data && "id" in data) {
         // Type guard to ensure 'id' exists in data
         //setChapterId(data.id.toString());
         console.log(data.bookId);
         console.log(data.id);
-        setChapterId(data.id ?? null);
+
         chapter = data;
         window.location.reload();
       }
     },
   });
-  const [chapterId, setChapterId] = useState<string | null>(null); // State to store the book ID
 
   const handleSubmit = async ({ title }: { title: string }) => {
     console.log(title);

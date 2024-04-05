@@ -1,7 +1,6 @@
 "use client";
-import AutoForm, { AutoFormSubmit } from "@/components/ui/auto-form";
+import AutoForm from "@/components/ui/auto-form";
 import * as z from "zod";
-import { DependencyType } from "./ui/auto-form/types";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "@/components/ui/button";
 import { api } from "~/utils/api";
@@ -32,7 +31,7 @@ const formSchema = z.object({
 
 const MyAutoForm = (): JSX.Element => {
   const router = useRouter();
-  const { mutate, data, isSuccess } = api.book.create.useMutation({
+  const { mutate } = api.book.create.useMutation({
     onSuccess: (data: Book) => {
       console.log(data);
       setBookId(data.id);

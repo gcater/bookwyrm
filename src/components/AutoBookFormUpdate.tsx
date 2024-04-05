@@ -1,16 +1,10 @@
 "use client";
-import AutoForm, { AutoFormSubmit } from "@/components/ui/auto-form";
+import AutoForm from "@/components/ui/auto-form";
 import * as z from "zod";
-import { DependencyType } from "./ui/auto-form/types";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "@/components/ui/button";
 import { api } from "~/utils/api";
 import type { Book } from "~/server/api/routers/book";
-import React, { useState } from "react"; // Import useState
-
-interface AutoBookFormUpdateProps {
-  bookId: string;
-}
 
 const formSchema = z.object({
   title: z
@@ -37,7 +31,7 @@ const formSchema = z.object({
 const MyAutoFormUpdate = ({ bookid }: { bookid: string }): JSX.Element => {
   const { data: queryData } = api.book.getBook.useQuery(bookid);
   console.log(queryData);
-  const { mutate, data, isSuccess } = api.book.updateBook.useMutation({
+  const { mutate } = api.book.updateBook.useMutation({
     onSuccess: (data: Book) => {
       console.log(data);
       window.location.reload();
