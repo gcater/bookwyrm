@@ -8,10 +8,9 @@ import { api } from "~/utils/api";
 import type { Book } from "~/server/api/routers/book";
 import React, { useState } from "react"; // Import useState
 
-
 interface AutoBookFormUpdateProps {
-    bookId: string;
-  }
+  bookId: string;
+}
 
 const formSchema = z.object({
   title: z
@@ -35,18 +34,26 @@ const formSchema = z.object({
     }),
 });
 
-const MyAutoFormUpdate = ({bookid}: {bookid: string}): JSX.Element => {
-    const {data: queryData} = api.book.getBook.useQuery(bookid);
-    console.log(queryData);
-    const { mutate, data, isSuccess } = api.book.updateBook.useMutation({
-        onSuccess: (data: Book) => {
-            console.log(data);
-            window.location.reload();
-       
-        },
-    });
-//   const [bookId, setBookId] = useState<string | null>(null); // State to store the book ID
+const MyAutoFormUpdate = ({ bookid }: { bookid: string }): JSX.Element => {
+  const { data: queryData } = api.book.getBook.useQuery(bookid);
+  console.log(queryData);
+  const { mutate, data, isSuccess } = api.book.updateBook.useMutation({
+    onSuccess: (data: Book) => {
+      console.log(data);
+      window.location.reload();
+    },
+  });
+  //   const [bookId, setBookId] = useState<string | null>(null); // State to store the book ID
 
+  const deleteBook = api.book.delete.useMutation({
+    onSuccess: () => {
+      window.location.href = "http://localhost:3000";
+    },
+    onError: (error) => {
+      console.log(error);
+      window.location.href = "http://localhost:3000";
+    },
+  });
   const handleSubmit = async ({
     title,
     author,
@@ -55,7 +62,7 @@ const MyAutoFormUpdate = ({bookid}: {bookid: string}): JSX.Element => {
     author: string;
   }) => {
     console.log(title, author);
-    mutate({ id: bookid, title, author});
+    mutate({ id: bookid, title, author });
     //console.log(data?.id);
   };
   return (
@@ -72,18 +79,18 @@ const MyAutoFormUpdate = ({bookid}: {bookid: string}): JSX.Element => {
             // to customize the UI
             values={{ title: queryData?.title, author: queryData?.author }}
             fieldConfig={{
-                title: {
-                    inputProps: {
-                        type: "text",
-                        defaultValue: queryData?.title,
-                    },
+              title: {
+                inputProps: {
+                  type: "text",
+                  defaultValue: queryData?.title,
                 },
-                author: {
-                    inputProps: {
-                        type: "text",
-                        defaultValue: queryData?.author,
-                    },
+              },
+              author: {
+                inputProps: {
+                  type: "text",
+                  defaultValue: queryData?.author,
                 },
+              },
             }}
             // Optionally, define dependencies between fields
             // dependencies={[
@@ -109,7 +116,6 @@ const MyAutoFormUpdate = ({bookid}: {bookid: string}): JSX.Element => {
             {/*
       All children passed to the form will be rendered below the form.
       */}
-           
           </AutoForm>
         </CardContent>
         {bookid && (
@@ -122,16 +128,10 @@ const MyAutoFormUpdate = ({bookid}: {bookid: string}): JSX.Element => {
             <CardContent>
               <Button
                 onClick={() => {
-                  if (window.confirm("Are you sure you want to delete this book?")) {
-                    api.book.delete.useMutation().mutate(bookid, {
-                      onSuccess: () => {
-                        alert("Book deleted successfully.");
-                        // Redirect or update UI accordingly
-                      },
-                      onError: (error) => {
-                        alert(`Error deleting book: ${error.message}`);
-                      },
-                    });
+                  if (
+                    window.confirm("Are you sure you want to delete this book?")
+                  ) {
+                    deleteBook.mutate(bookid);
                   }
                 }}
               >
@@ -146,4 +146,3 @@ const MyAutoFormUpdate = ({bookid}: {bookid: string}): JSX.Element => {
 };
 
 export default MyAutoFormUpdate;
-

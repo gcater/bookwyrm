@@ -73,7 +73,7 @@ const MyAutoForm = ({
       Alternatively, you can not pass a submit button
       to create auto-saving forms etc.
       */}
-            <Button type="submit">Add Section</Button>
+            <Button type="submit">Update Section</Button>
 
             {/*
       All children passed to the form will be rendered below the form.

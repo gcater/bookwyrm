@@ -39,6 +39,7 @@ const MyAutoForm = (): JSX.Element => {
       void router.push(`/book/${data.id}`);
     },
   });
+
   const [bookId, setBookId] = useState<string | null>(null); // State to store the book ID
 
   const handleSubmit = async ({
@@ -104,9 +105,11 @@ const MyAutoForm = (): JSX.Element => {
                   if (
                     window.confirm("Are you sure you want to delete this book?")
                   ) {
-                    api.book.delete.useMutation().mutate(bookId, {
+                    const deleteBook = api.book.delete.useMutation();
+                    deleteBook.mutate(bookId, {
                       onSuccess: () => {
                         alert("Book deleted successfully.");
+                        window.location.href = "http://localhost:3000";
                         // Redirect or update UI accordingly
                       },
                       onError: (error) => {
