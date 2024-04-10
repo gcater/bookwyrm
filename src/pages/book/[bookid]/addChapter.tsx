@@ -6,8 +6,8 @@ import AutoChapterForm from "~/components/ChapterForm";
 
 export default function AddChapterPage() {
   const router = useRouter();
-  const bookid = router.query.bookid as string; // Moved
-  if (!bookid) return <p>No book found!</p>;
+  const bookId = router.query.bookid as string; // Moved
+  if (!bookId) return <p>No book found!</p>;
   return (
     <>
       <Head>
@@ -21,7 +21,7 @@ export default function AddChapterPage() {
         </div>
         <div className="flex w-full">
           <div className="w-1/2">
-            <AutoChapterForm bookId={bookid} />
+            <AutoChapterForm bookId={bookId} />
           </div>
           <div className="w-1/2">
             <BookRenderer />

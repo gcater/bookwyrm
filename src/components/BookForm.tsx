@@ -12,7 +12,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-const formSchema = z.object({
+const bookInputs = z.object({
   title: z
     .string({
       required_error: "Title is required.",
@@ -68,7 +68,7 @@ const BookForm = (): JSX.Element => {
         </CardHeader>
         <CardContent>
           <AutoForm
-            formSchema={formSchema}
+            formSchema={bookInputs}
             fieldConfig={{}}
             onSubmit={handleCreate}
           >
