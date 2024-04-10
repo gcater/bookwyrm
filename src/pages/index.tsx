@@ -21,7 +21,6 @@ export default function Home() {
 
         <div className="flex w-full">
           <div className="w-1/2">{BookForm()}</div>
-          <div className="w-1/2">{BookRenderer()}</div>
         </div>
       </main>
     </>

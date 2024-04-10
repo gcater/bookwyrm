@@ -1,17 +1,15 @@
 "use client";
 import AutoForm from "@/components/ui/auto-form";
 import * as z from "zod";
-
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "@/components/ui/button";
 import { api } from "~/utils/api";
-import React, { useState } from "react";
+import React from "react";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import router from "next/router";
 
 const BookInputSchema = z.object({
   title: z
@@ -31,31 +29,30 @@ const BookInputSchema = z.object({
     }),
 });
 
-const BookForm = (): JSX.Element => {
-  const { mutate: createBook } = api.book.createBook.useMutation({
+const BookUpdate = ({ bookId }: { bookId: string }): JSX.Element => {
+  const { data: queryData, refetch: refetchBook } =
+    api.book.getBook.useQuery(bookId);
+
+  const { mutate: updateBook } = api.book.updateBook.useMutation({
     onSuccess: (data) => {
       console.log(data);
-      setBookId(data.id);
-      void router.push(`/book/${data.id}`);
+      void refetchBook();
     },
   });
   const { mutate: deleteBook } = api.book.deleteBook.useMutation({
     onSuccess: () => {
-      setBookId(null);
       window.location.href = "/";
     },
   });
 
-  const [bookId, setBookId] = useState<string | null>(null); // State to store the book ID
-
-  const handleCreate = async ({
+  const handleUpdate = async ({
     title,
     author,
   }: {
     title: string;
     author: string;
   }) => {
-    createBook({ title, author });
+    updateBook({ id: bookId, title, author });
   };
 
   const handleDelete = async (bookId: string) => {
@@ -71,10 +68,10 @@ const BookForm = (): JSX.Element => {
         <CardContent>
           <AutoForm
             formSchema={BookInputSchema}
-            fieldConfig={{}}
-            onSubmit={handleCreate}
+            values={{ title: queryData?.title, author: queryData?.author }}
+            onSubmit={handleUpdate}
           >
-            <Button type="submit">Create Book</Button>
+            <Button type="submit">Update Book</Button>
           </AutoForm>
         </CardContent>
         {bookId && (
@@ -103,4 +100,4 @@ const BookForm = (): JSX.Element => {
   );
 };
 
-export default BookForm;
+export default BookUpdate;

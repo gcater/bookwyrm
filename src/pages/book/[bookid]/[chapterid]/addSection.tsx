@@ -29,7 +29,7 @@ export default function AddSectionPage() {
             <SectionForm bookId={bookId} chapterId={chapterId} />
           </div>
           <div className="w-1/2">
-            <BookRenderer />
+            <BookRenderer bookId={bookId} />
           </div>
         </div>
       </main>

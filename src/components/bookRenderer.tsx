@@ -13,8 +13,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-const BookRenderer = () => {
-  const { data: book, isLoading } = api.book.getLatest.useQuery();
+const BookRenderer = ({ bookId }: { bookId: string }) => {
+  const { data: book, isLoading } = api.book.getBook.useQuery(bookId);
 
   if (isLoading) return <div>Loading...</div>;
   if (!book) return <div>No books found</div>;

@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "src/server/api/trpc";
 import { SectionFormSchema } from "~/components/SectionForm";
+import { TRPCError } from "@trpc/server";
 
 export const bookRouter = createTRPCRouter({
   createBook: protectedProcedure
@@ -20,6 +21,42 @@ export const bookRouter = createTRPCRouter({
         },
       });
       return book;
+    }),
+  getBook: protectedProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      const book = await ctx.db.book.findUnique({
+        where: { id: input },
+        include: {
+          chapters: {
+            include: {
+              sections: true,
+            },
+          },
+        },
+      });
+      if (!book) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: `No book found with id ${input}`,
+        });
+      }
+      return book;
+    }),
+  updateBook: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        title: z.string(),
+        author: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const updatedBook = await ctx.db.book.update({
+        where: { id: input.id },
+        data: { title: input.title, author: input.author },
+      });
+      return updatedBook;
     }),
 
   deleteBook: protectedProcedure
