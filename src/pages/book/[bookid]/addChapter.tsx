@@ -1,12 +1,13 @@
 "use client";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import BookRender from "~/components/BookRenderer";
+import BookRenderer from "~/components/BookRenderer";
 import AutoChapterForm from "~/components/ChapterForm";
 
 export default function AddChapterPage() {
   const router = useRouter();
-  const { bookid } = router.query; // `bookid` matches the dynamic segment name
+  const bookid = router.query.bookid as string; // Moved
+  if (!bookid) return <p>No book found!</p>;
   return (
     <>
       <Head>
@@ -20,10 +21,10 @@ export default function AddChapterPage() {
         </div>
         <div className="flex w-full">
           <div className="w-1/2">
-            <AutoChapterForm bookId={bookid as string} />
+            <AutoChapterForm bookId={bookid} />
           </div>
           <div className="w-1/2">
-            <BookRender />
+            <BookRenderer />
           </div>
         </div>
       </main>
