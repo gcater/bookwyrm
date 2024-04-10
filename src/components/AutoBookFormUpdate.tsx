@@ -29,12 +29,13 @@ const formSchema = z.object({
 });
 
 const MyAutoFormUpdate = ({ bookid }: { bookid: string }): JSX.Element => {
-  const { data: queryData } = api.book.getBook.useQuery(bookid);
+  const { data: queryData, refetch: refetchBook } =
+    api.book.getBook.useQuery(bookid);
   console.log(queryData);
   const { mutate } = api.book.updateBook.useMutation({
     onSuccess: (data: Book) => {
       console.log(data);
-      window.location.reload();
+      void refetchBook();
     },
   });
   //   const [bookId, setBookId] = useState<string | null>(null); // State to store the book ID
