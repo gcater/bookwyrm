@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { api } from "~/utils/api";
 
-interface AutoSectionFormProps {
+interface SectionFormProps {
   bookId: string;
   chapterId: string;
 }
@@ -24,15 +24,14 @@ const SectionInputSchema = z.object({
   }),
 });
 
-const SectionForm = ({
-  bookId,
-  chapterId,
-}: AutoSectionFormProps): JSX.Element => {
-  const {
-    mutate,
-    data: mutationResult,
-    isSuccess,
-  } = api.book.addSection.useMutation({
+export const SectionFormSchema = z.object({
+  section: SectionInputSchema,
+  bookId: z.string(),
+  chapterId: z.string(),
+});
+
+const SectionForm = ({ bookId, chapterId }: SectionFormProps): JSX.Element => {
+  const { mutate } = api.book.addSection.useMutation({
     onSuccess: (responseData) => {
       if (responseData && "id" in responseData) {
         console.log(responseData);
@@ -42,12 +41,9 @@ const SectionForm = ({
       console.error(error);
     },
   });
-  function handleSubmit(values: { title: string; content: string }): void {
+  function handleSubmit(values: z.infer<typeof SectionInputSchema>): void {
     mutate({
-      section: {
-        title: values.title,
-        content: values.content,
-      },
+      section: values,
       bookId,
       chapterId,
     });

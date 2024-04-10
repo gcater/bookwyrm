@@ -12,9 +12,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-type CardProps = React.ComponentProps<typeof Card>;
 
-const BookRenderer = ({ className, ...props }: CardProps) => {
+const BookRenderer = () => {
   const { data: book, isLoading } = api.book.getLatest.useQuery();
 
   if (isLoading) return <div>Loading...</div>;
@@ -23,7 +22,7 @@ const BookRenderer = ({ className, ...props }: CardProps) => {
   return (
     //book with dynamic chapters and sections
     <div>
-      <Card className={cn("mb-4", className)} {...props}>
+      <Card className={cn("mb-4")}>
         <CardHeader>
           <CardTitle>{book.title}</CardTitle>
           <CardDescription>Author: {book.author}</CardDescription>
@@ -37,11 +36,7 @@ const BookRenderer = ({ className, ...props }: CardProps) => {
             {chapter.sections &&
               chapter.sections.length > 0 &&
               chapter.sections.map((section, sectionIndex) => (
-                <Card
-                  key={sectionIndex}
-                  className={cn("mb-2", className)}
-                  {...props}
-                >
+                <Card key={sectionIndex} className={cn("mb-2")}>
                   <CardContent>
                     <p>{section.title}</p>
                     <p>{section.content}</p>

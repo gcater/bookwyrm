@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "src/server/api/trpc";
+import { SectionFormSchema } from "~/components/SectionForm";
 
 export const bookRouter = createTRPCRouter({
   createBook: protectedProcedure
@@ -22,7 +23,6 @@ export const bookRouter = createTRPCRouter({
     }),
 
   deleteBook: protectedProcedure
-    // commit "Git fix Read wyrm": changed input to be an object with a bookId property
     .input(z.object({ bookId: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const deletedBook = await ctx.db.book.delete({
@@ -101,16 +101,7 @@ export const bookRouter = createTRPCRouter({
     }),
   // mutation to add a section to a chapter in a book
   addSection: protectedProcedure
-    .input(
-      z.object({
-        bookId: z.string(),
-        chapterId: z.string(),
-        section: z.object({
-          title: z.string().min(1, "Section title is required"),
-          content: z.string().min(1, "Section content is required"),
-        }),
-      }),
-    )
+    .input(SectionFormSchema)
     .mutation(async ({ ctx, input }) => {
       // First, ensure the chapter exists within the book
       const chapterExists = await ctx.db.chapter.findFirst({

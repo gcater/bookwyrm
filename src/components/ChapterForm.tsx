@@ -21,7 +21,7 @@ interface ChapterFormProps {
 }
 
 const ChapterForm = ({ bookId }: ChapterFormProps): JSX.Element => {
-  const { mutate, data, isSuccess } = api.book.addChapter.useMutation({
+  const { mutate: addChapterMutation } = api.book.addChapter.useMutation({
     onSuccess: (data) => {
       if (data && "id" in data) {
         setChapterId(data.id ?? null);
@@ -31,7 +31,7 @@ const ChapterForm = ({ bookId }: ChapterFormProps): JSX.Element => {
   const [chapterId, setChapterId] = useState<string | null>(null); // State to store the book ID
 
   const handleSubmit = async ({ title }: { title: string }) => {
-    mutate({
+    addChapterMutation({
       chapter: {
         title,
       },
