@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "@/components/ui/button";
 import { api } from "~/utils/api";
 
-import React, { useState } from "react";
+import React from "react";
 const ChapterInputSchema = z.object({
   title: z
     .string({
@@ -16,28 +16,36 @@ const ChapterInputSchema = z.object({
     }),
 });
 
-interface ChapterFormProps {
+interface ChapterUpdateProps {
   bookId: string;
+  initialTitle: string;
+  chapterId: string;
 }
 
-const ChapterForm = ({ bookId }: ChapterFormProps): JSX.Element => {
-  const { mutate: addChapterMutation } = api.book.addChapter.useMutation({
-    onSuccess: (data) => {
-      if (data && "id" in data) {
-        setChapterId(data.id ?? null);
-      }
+const ChapterUpdate = ({
+  bookId,
+  initialTitle,
+  chapterId,
+}: ChapterUpdateProps): JSX.Element => {
+  const { data: queryData, refetch: refetchBook } =
+    api.book.getBook.useQuery(bookId);
+  const { refetch: refetchChapters } = api.book.getChapters.useQuery(bookId);
+
+  const { mutate: updateChapter } = api.book.updateChapter.useMutation({
+    onSuccess: () => {
+      void refetchBook();
+      void refetchChapters();
     },
   });
-  const [chapterId, setChapterId] = useState<string | null>(null); // State to store the book ID
 
-  const handleSubmit = async ({ title }: { title: string }) => {
-    addChapterMutation({
-      chapter: {
-        title,
-      },
-      bookId,
+  const handleUpdate = async ({ title }: { title: string }) => {
+    updateChapter({
+      title,
+      id: chapterId,
+      bookId: bookId,
     });
   };
+
   return (
     <div className="p-6">
       <Card>
@@ -45,8 +53,12 @@ const ChapterForm = ({ bookId }: ChapterFormProps): JSX.Element => {
           <CardTitle>Chapter Form</CardTitle>
         </CardHeader>
         <CardContent>
-          <AutoForm formSchema={ChapterInputSchema} onSubmit={handleSubmit}>
-            <Button type="submit">Create Chapter</Button>
+          <AutoForm
+            formSchema={ChapterInputSchema}
+            values={{ title: initialTitle }}
+            onSubmit={handleUpdate}
+          >
+            <Button type="submit">Update Chapter</Button>
           </AutoForm>
         </CardContent>
         {chapterId && bookId && (
@@ -64,4 +76,4 @@ const ChapterForm = ({ bookId }: ChapterFormProps): JSX.Element => {
   );
 };
 
-export default ChapterForm;
+export default ChapterUpdate;
