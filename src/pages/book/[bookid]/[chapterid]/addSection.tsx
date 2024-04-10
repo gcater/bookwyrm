@@ -6,7 +6,10 @@ import BookRenderer from "~/components/BookRenderer";
 import SectionForm from "~/components/SectionForm";
 export default function AddSectionPage() {
   const router = useRouter();
-  const { bookid, chapterid } = router.query; // `bookid` matches the dynamic segment name
+  const bookId = router.query.bookid as string; // Moved and type-checked
+  const chapterId = router.query.chapterid as string; // Moved and type-checked
+
+  if (!bookId || !chapterId) return <p>No book or chapter found!</p>; // Added check for both bookId and chapterId
 
   return (
     <>
@@ -21,10 +24,7 @@ export default function AddSectionPage() {
         </div>
         <div className="flex w-full">
           <div className="w-1/2">
-            <SectionForm
-              bookId={bookid as string}
-              chapterId={chapterid as string}
-            />
+            <SectionForm bookId={bookId} chapterId={chapterId} />
           </div>
           <div className="w-1/2">
             <BookRenderer />
