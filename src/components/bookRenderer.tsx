@@ -14,11 +14,7 @@ import {
 } from "@/components/ui/card";
 type CardProps = React.ComponentProps<typeof Card>;
 
-const BookRenderer = (): JSX.Element => {
-  return ShadCard({});
-};
-
-export function ShadCard({ className, ...props }: CardProps) {
+const BookRenderer = ({ className, ...props }: CardProps) => {
   const { data: book, isLoading } = api.book.getLatest.useQuery();
 
   if (isLoading) return <div>Loading...</div>;
@@ -56,6 +52,6 @@ export function ShadCard({ className, ...props }: CardProps) {
         ))}
     </div>
   );
-}
+};
 
 export default BookRenderer;
