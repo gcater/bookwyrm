@@ -6,8 +6,8 @@ import BookRenderer from "~/components/BookRenderer";
 import SectionForm from "~/components/SectionForm";
 export default function AddSectionPage() {
   const router = useRouter();
-  const bookId = router.query.bookid as string; // Moved and type-checked
-  const chapterId = router.query.chapterid as string; // Moved and type-checked
+  const bookId = router.query.bookid as string;
+  const chapterId = router.query.chapterid as string;
 
   if (!bookId || !chapterId) return <p>No book or chapter found!</p>; // Added check for both bookId and chapterId
 

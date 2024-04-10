@@ -10,7 +10,7 @@ interface AutoSectionFormProps {
   chapterId: string;
 }
 
-const sectionInputs = z.object({
+const SectionInputSchema = z.object({
   title: z
     .string({
       required_error: "Title is required.",
@@ -61,7 +61,7 @@ const SectionForm = ({
         <CardContent>
           <AutoForm
             // Pass the schema to the form
-            formSchema={sectionInputs}
+            formSchema={SectionInputSchema}
             onSubmit={handleSubmit}
           >
             <Button type="submit">Send now</Button>

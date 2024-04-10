@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { api } from "~/utils/api";
 
 import React, { useState } from "react";
-const chapterInputs = z.object({
+const ChapterInputSchema = z.object({
   title: z
     .string({
       required_error: "Title is required.",
@@ -45,7 +45,7 @@ const ChapterForm = ({ bookId }: ChapterFormProps): JSX.Element => {
           <CardTitle>Chapter Form</CardTitle>
         </CardHeader>
         <CardContent>
-          <AutoForm formSchema={chapterInputs} onSubmit={handleSubmit}>
+          <AutoForm formSchema={ChapterInputSchema} onSubmit={handleSubmit}>
             <Button type="submit">Send now</Button>
           </AutoForm>
         </CardContent>
