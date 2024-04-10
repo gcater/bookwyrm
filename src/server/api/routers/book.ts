@@ -1,88 +1,40 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "src/server/api/trpc";
 
-export interface Section {
-  id?: string;
-  title: string;
-  content: string;
-}
-
-export interface Chapter {
-  id?: string;
-  title: string;
-  sections: { title: string; content: string }[];
-  bookId?: string;
-}
-
-export interface Book {
-  id: string;
-  title: string;
-  author: string;
-  chapters?: Chapter[];
-}
-
 export const bookRouter = createTRPCRouter({
-  create: protectedProcedure
+  createBook: protectedProcedure
     .input(
       z.object({
         title: z.string().min(1, "Title is required"),
         author: z.string().min(1, "Author is required"),
-        chapters: z.array(
-          z.object({
-            title: z.string().min(1, "Chapter title is required"),
-            sections: z.array(
-              z.object({
-                title: z.string().min(1, "Section title is required"),
-                content: z.string().min(1, "Section content is required"),
-              }),
-            ),
-          }),
-        ),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      // Simulate a slow db call if necessary
-      // await new Promise((resolve) => setTimeout(resolve, 1000));
-
       // Create the book with chapters and sections
       const book = await ctx.db.book.create({
         data: {
           title: input.title,
           author: input.author,
-          createdBy: { connect: { id: ctx.session.user.id } },
-          chapters: {
-            create: input.chapters.map((chapter: Chapter) => ({
-              title: chapter.title,
-              sections: {
-                create: chapter.sections,
-              },
-            })),
-          },
-        },
-        include: {
-          chapters: {
-            include: {
-              sections: true,
-            },
-          },
+          createdById: ctx.session.user.id,
         },
       });
-
       return book;
     }),
 
-  delete: protectedProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
-    // Assuming 'input' is the ID of the book to delete
-    const deletedBook = await ctx.db.book.delete({
-      where: { id: input },
-    });
-    return deletedBook;
-  }),
+  deleteBook: protectedProcedure
+    // commit "Git fix Read wyrm": changed input to be an object with a bookId property
+    .input(z.object({ bookId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const deletedBook = await ctx.db.book.delete({
+        where: { id: input.bookId },
+      });
+      return deletedBook;
+    }),
   getAll: protectedProcedure.query(async ({ ctx }) => {
     // Fetch all books created by the current user, including their chapters and sections
     const books = await ctx.db.book.findMany({
       orderBy: { createdAt: "desc" },
-      where: { createdBy: { id: ctx.session.user.id } },
+      where: { createdById: ctx.session.user.id },
       include: {
         chapters: {
           include: {
@@ -91,13 +43,12 @@ export const bookRouter = createTRPCRouter({
         },
       },
     });
-
     return books;
   }),
   getLatest: protectedProcedure.query(({ ctx }) => {
     return ctx.db.book.findFirst({
       orderBy: { createdAt: "desc" },
-      where: { createdBy: { id: ctx.session.user.id } },
+      where: { createdById: ctx.session.user.id },
       include: {
         chapters: {
           include: {
@@ -113,16 +64,10 @@ export const bookRouter = createTRPCRouter({
         bookId: z.string(),
         chapter: z.object({
           title: z.string().min(1, "Chapter title is required"),
-          sections: z.array(
-            z.object({
-              title: z.string().min(1, "Section title is required"),
-              content: z.string().min(1, "Section content is required"),
-            }),
-          ),
         }),
       }),
     )
-    .mutation(async ({ ctx, input }): Promise<Chapter> => {
+    .mutation(async ({ ctx, input }) => {
       // First, ensure the book exists
       const bookExists = await ctx.db.book.findUnique({
         where: { id: input.bookId },
@@ -132,24 +77,17 @@ export const bookRouter = createTRPCRouter({
       }
 
       // Then, use the appropriate method to add a chapter to the book
-      const updatedBook: Book = await ctx.db.book.update({
+      const updatedBook = await ctx.db.book.update({
         where: { id: input.bookId },
         data: {
           chapters: {
             create: {
               title: input.chapter.title,
-              sections: {
-                create: input.chapter.sections, // Ensure sections are correctly added
-              },
             },
           },
         },
         include: {
-          chapters: {
-            include: {
-              sections: true, // Correctly nest 'sections' within 'chapters'
-            },
-          },
+          chapters: {},
         },
       });
       const newChapter =
@@ -173,7 +111,7 @@ export const bookRouter = createTRPCRouter({
         }),
       }),
     )
-    .mutation(async ({ ctx, input }): Promise<Section> => {
+    .mutation(async ({ ctx, input }) => {
       // First, ensure the chapter exists within the book
       const chapterExists = await ctx.db.chapter.findFirst({
         where: {
