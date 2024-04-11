@@ -35,20 +35,14 @@ const BookRenderer = ({ bookId }: { bookId: string }) => {
             <h3 className="mb-2 text-lg font-semibold">{chapter.title}</h3>
             {chapter.sections &&
               chapter.sections.length > 0 &&
-              chapter.sections
-                .sort(
-                  (a, b) =>
-                    new Date(a.createdAt).getTime() -
-                    new Date(b.createdAt).getTime(),
-                )
-                .map((section, sectionIndex) => (
-                  <Card key={sectionIndex} className={cn("mb-2")}>
-                    <CardContent>
-                      <p>{section.title}</p>
-                      <p>{section.content}</p>
-                    </CardContent>
-                  </Card>
-                ))}
+              chapter.sections.map((section, sectionIndex) => (
+                <Card key={sectionIndex} className={cn("mb-2")}>
+                  <CardContent>
+                    <p>{section.title}</p>
+                    <p>{section.content}</p>
+                  </CardContent>
+                </Card>
+              ))}
           </div>
         ))}
     </div>

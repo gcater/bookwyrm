@@ -31,8 +31,15 @@ export const bookRouter = createTRPCRouter({
         where: { id: input },
         include: {
           chapters: {
+            orderBy: {
+              createdAt: "asc", // Sort chapters by createdAt in ascending order
+            },
             include: {
-              sections: true,
+              sections: {
+                orderBy: {
+                  createdAt: "asc", // Sort sections by createdAt in ascending order within each chapter
+                },
+              },
             },
           },
         },
@@ -76,8 +83,15 @@ export const bookRouter = createTRPCRouter({
       where: { createdById: ctx.session.user.id },
       include: {
         chapters: {
+          orderBy: {
+            createdAt: "asc", // Sort chapters by createdAt in ascending order
+          },
           include: {
-            sections: true,
+            sections: {
+              orderBy: {
+                createdAt: "asc", // Sort sections by createdAt in ascending order within each chapter
+              },
+            },
           },
         },
       },
@@ -90,8 +104,15 @@ export const bookRouter = createTRPCRouter({
       where: { createdById: ctx.session.user.id },
       include: {
         chapters: {
+          orderBy: {
+            createdAt: "asc", // Sort chapters by createdAt in ascending order
+          },
           include: {
-            sections: true,
+            sections: {
+              orderBy: {
+                createdAt: "asc", // Sort sections by createdAt in ascending order within each chapter
+              },
+            },
           },
         },
       },
