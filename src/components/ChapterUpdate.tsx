@@ -27,8 +27,7 @@ const ChapterUpdate = ({
   initialTitle,
   chapterId,
 }: ChapterUpdateProps): JSX.Element => {
-  const { data: queryData, refetch: refetchBook } =
-    api.book.getBook.useQuery(bookId);
+  const { refetch: refetchBook } = api.book.getBook.useQuery(bookId);
   const { refetch: refetchChapters } = api.book.getChapters.useQuery(bookId);
 
   const { mutate: updateChapter } = api.book.updateChapter.useMutation({

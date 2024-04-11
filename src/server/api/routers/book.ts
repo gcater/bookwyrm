@@ -23,8 +23,10 @@ export const bookRouter = createTRPCRouter({
       return book;
     }),
   getBook: protectedProcedure
+
     .input(z.string())
     .query(async ({ ctx, input }) => {
+      console.log(`Fetching book with ID: ${input}`); // Added console.log for debugging
       const book = await ctx.db.book.findUnique({
         where: { id: input },
         include: {
@@ -105,6 +107,7 @@ export const bookRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      console.log("Attempting to add a chapter to book with ID:", input.bookId); // Added console.log as per instruction
       // First, ensure the book exists
       const bookExists = await ctx.db.book.findUnique({
         where: { id: input.bookId },

@@ -27,14 +27,20 @@ export default function AddChapterPage() {
         </div>
         <div className="flex w-full">
           <div className="w-1/2">
-            {chapters?.map((chapter) => (
-              <ChapterUpdate
-                key={chapter.id}
-                bookId={bookId}
-                initialTitle={chapter.title}
-                chapterId={chapter.id}
-              />
-            ))}
+            {chapters
+              ?.sort(
+                (a, b) =>
+                  new Date(a.createdAt).getTime() -
+                  new Date(b.createdAt).getTime(),
+              )
+              .map((chapter) => (
+                <ChapterUpdate
+                  key={chapter.id}
+                  bookId={bookId}
+                  initialTitle={chapter.title}
+                  chapterId={chapter.id}
+                />
+              ))}
             <ChapterForm bookId={bookId} />
           </div>
 
