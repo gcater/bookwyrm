@@ -6,6 +6,11 @@ import { Button } from "@/components/ui/button";
 import { api } from "~/utils/api";
 
 import React from "react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@radix-ui/react-popover";
 const ChapterInputSchema = z.object({
   title: z
     .string({
@@ -31,6 +36,12 @@ const ChapterUpdate = ({
   const { refetch: refetchChapters } = api.book.getChapters.useQuery(bookId);
 
   const { mutate: updateChapter } = api.book.updateChapter.useMutation({
+    onSuccess: () => {
+      void refetchBook();
+      void refetchChapters();
+    },
+  });
+  const { mutate: deleteChapter } = api.book.deleteChapter.useMutation({
     onSuccess: () => {
       void refetchBook();
       void refetchChapters();
@@ -70,6 +81,18 @@ const ChapterUpdate = ({
             </a>
           </CardContent>
         )}
+        <CardContent>
+          <Popover>
+            <PopoverTrigger>
+              <Button>Delete Chapter</Button>
+            </PopoverTrigger>
+            <PopoverContent>
+              <Button onClick={() => deleteChapter({ bookId, chapterId })}>
+                Confirm Delete
+              </Button>
+            </PopoverContent>
+          </Popover>
+        </CardContent>
       </Card>
     </div>
   );
