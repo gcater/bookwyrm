@@ -23,7 +23,6 @@ interface ChapterFormProps {
 
 const ChapterForm = ({ bookId }: ChapterFormProps): JSX.Element => {
   const { refetch: refetchBook } = api.book.getBook.useQuery(bookId);
-  const { refetch: refetchChapters } = api.book.getChapters.useQuery(bookId);
 
   const { mutate: addChapterMutation } = api.book.addChapter.useMutation({
     onSuccess: (data) => {
@@ -31,7 +30,6 @@ const ChapterForm = ({ bookId }: ChapterFormProps): JSX.Element => {
         setChapterId(data.id ?? null);
       }
       void refetchBook();
-      void refetchChapters();
     },
   });
   const [chapterId, setChapterId] = useState<string | null>(null); // State to store the book ID

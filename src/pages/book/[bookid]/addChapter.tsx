@@ -11,9 +11,13 @@ export default function AddChapterPage() {
   const bookId = router.query.bookid as string;
   if (!bookId) return <p>No book found!</p>;
 
-  const { data: chapters, isLoading } = api.book.getChapters.useQuery(bookId);
-
+  const { data: retrievedBook, isLoading } = api.book.getBook.useQuery(bookId);
+  const chapters =
+    retrievedBook && Array.isArray(retrievedBook.chapters)
+      ? retrievedBook.chapters
+      : [];
   if (isLoading) return <p>Loading chapters...</p>;
+  if (!retrievedBook) return <p>No book found!</p>;
 
   return (
     <>

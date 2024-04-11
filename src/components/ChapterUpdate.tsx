@@ -29,12 +29,10 @@ const ChapterUpdate = ({
   chapterId,
 }: ChapterUpdateProps): JSX.Element => {
   const { refetch: refetchBook } = api.book.getBook.useQuery(bookId);
-  const { refetch: refetchChapters } = api.book.getChapters.useQuery(bookId);
 
   const { mutate: updateChapter } = api.book.updateChapter.useMutation({
     onSuccess: () => {
       void refetchBook();
-      void refetchChapters();
     },
   });
 

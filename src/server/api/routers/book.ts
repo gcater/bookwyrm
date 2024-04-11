@@ -170,23 +170,6 @@ export const bookRouter = createTRPCRouter({
       }
     }),
 
-  getChapters: protectedProcedure
-    .input(z.string())
-    .query(async ({ ctx, input }) => {
-      // Check if the book exists before fetching chapters
-      const bookExists = await ctx.db.book.findUnique({
-        where: { id: input },
-      });
-      if (!bookExists) {
-        throw new Error("Book not found");
-      }
-
-      const chapters = await ctx.db.chapter.findMany({
-        where: { bookId: input },
-        include: { sections: true },
-      });
-      return chapters;
-    }),
   // mutation to add a section to a chapter in a book
   addSection: protectedProcedure
     .input(SectionFormSchema)
