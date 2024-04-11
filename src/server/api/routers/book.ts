@@ -360,40 +360,4 @@ export const bookRouter = createTRPCRouter({
       });
       return deletedSection;
     }),
-  deleteSections: protectedProcedure
-    .input(
-      z.object({
-        bookId: z.string(),
-        chapterId: z.string(),
-      }),
-    )
-    .mutation(async ({ ctx, input }) => {
-      // Check if the book exists
-      const bookExists = await ctx.db.book.findUnique({
-        where: { id: input.bookId },
-      });
-      if (!bookExists) {
-        throw new Error("Book not found");
-      }
-
-      // Check if the chapter exists within the book
-      const chapterExists = await ctx.db.chapter.findFirst({
-        where: {
-          id: input.chapterId,
-          bookId: input.bookId,
-        },
-      });
-      if (!chapterExists) {
-        throw new Error("Chapter not found in the specified book");
-      }
-
-      // Delete all sections within the chapter and book
-      const deletedSections = await ctx.db.section.deleteMany({
-        where: {
-          chapterId: input.chapterId,
-          bookId: input.bookId,
-        },
-      });
-      return deletedSections;
-    }),
 });
