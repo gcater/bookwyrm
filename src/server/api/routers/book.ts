@@ -23,14 +23,23 @@ export const bookRouter = createTRPCRouter({
       return book;
     }),
   getBook: protectedProcedure
+
     .input(z.string())
     .query(async ({ ctx, input }) => {
+      console.log(`Fetching book with ID: ${input}`); // Added console.log for debugging
       const book = await ctx.db.book.findUnique({
         where: { id: input },
         include: {
           chapters: {
+            orderBy: {
+              createdAt: "asc", // Sort chapters by createdAt in ascending order
+            },
             include: {
-              sections: true,
+              sections: {
+                orderBy: {
+                  createdAt: "asc", // Sort sections by createdAt in ascending order within each chapter
+                },
+              },
             },
           },
         },
@@ -74,8 +83,15 @@ export const bookRouter = createTRPCRouter({
       where: { createdById: ctx.session.user.id },
       include: {
         chapters: {
+          orderBy: {
+            createdAt: "asc", // Sort chapters by createdAt in ascending order
+          },
           include: {
-            sections: true,
+            sections: {
+              orderBy: {
+                createdAt: "asc", // Sort sections by createdAt in ascending order within each chapter
+              },
+            },
           },
         },
       },
@@ -88,8 +104,15 @@ export const bookRouter = createTRPCRouter({
       where: { createdById: ctx.session.user.id },
       include: {
         chapters: {
+          orderBy: {
+            createdAt: "asc", // Sort chapters by createdAt in ascending order
+          },
           include: {
-            sections: true,
+            sections: {
+              orderBy: {
+                createdAt: "asc", // Sort sections by createdAt in ascending order within each chapter
+              },
+            },
           },
         },
       },
@@ -105,6 +128,7 @@ export const bookRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      console.log("Attempting to add a chapter to book with ID:", input.bookId); // Added console.log as per instruction
       // First, ensure the book exists
       const bookExists = await ctx.db.book.findUnique({
         where: { id: input.bookId },
@@ -136,6 +160,37 @@ export const bookRouter = createTRPCRouter({
         return newChapter;
       }
     }),
+  updateChapter: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        title: z.string(),
+        bookId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      // First, check if the chapter exists
+      const chapterExists = await ctx.db.chapter.findUnique({
+        where: { id: input.id },
+      });
+      if (!chapterExists) {
+        throw new Error("Chapter not found");
+      }
+
+      // Then, proceed to update the chapter
+      try {
+        const updatedChapter = await ctx.db.chapter.update({
+          where: { id: input.id },
+          data: {
+            title: input.title,
+          },
+        });
+        return updatedChapter;
+      } catch (error) {
+        throw new Error("Failed to update chapter");
+      }
+    }),
+
   // mutation to add a section to a chapter in a book
   addSection: protectedProcedure
     .input(SectionFormSchema)
