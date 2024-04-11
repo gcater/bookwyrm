@@ -30,8 +30,8 @@ const BookInputSchema = z.object({
     }),
 });
 
-const EditBook = ({ bookId }: { bookId: string }): JSX.Element => {
-  const { data: queryData, refetch: refetchBook } =
+const BookUpdate = ({ bookId }: { bookId: string }): JSX.Element => {
+  const { data: updatedBook, refetch: refetchBook } =
     api.book.getBook.useQuery(bookId);
 
   const { mutate: updateBook } = api.book.updateBook.useMutation({
@@ -69,7 +69,7 @@ const EditBook = ({ bookId }: { bookId: string }): JSX.Element => {
         <CardContent>
           <AutoForm
             formSchema={BookInputSchema}
-            values={{ title: queryData?.title, author: queryData?.author }}
+            values={{ title: updatedBook?.title, author: updatedBook?.author }}
             onSubmit={handleUpdate}
           >
             <Button type="submit">Update Book</Button>
@@ -103,4 +103,4 @@ const EditBook = ({ bookId }: { bookId: string }): JSX.Element => {
   );
 };
 
-export default EditBook;
+export default BookUpdate;

@@ -12,6 +12,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import router from "next/router";
+import Link from "next/link";
 
 const BookInputSchema = z.object({
   title: z
@@ -42,7 +43,7 @@ const BookForm = (): JSX.Element => {
   const { mutate: deleteBook } = api.book.deleteBook.useMutation({
     onSuccess: () => {
       setBookId(null);
-      window.location.href = "/";
+      void router.push("/");
     },
   });
 
@@ -80,9 +81,9 @@ const BookForm = (): JSX.Element => {
         {bookId && (
           <>
             <CardContent>
-              <Button>
-                <a href={`/book/${bookId}/addChapter`}>Add Chapter</a>
-              </Button>
+              <Link href={`/book/${bookId}/addChapter`}>
+                <Button>Add Chapter</Button>
+              </Link>
             </CardContent>
             <CardContent>
               <Popover>

@@ -2,7 +2,6 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import { api } from "~/utils/api";
-import BookRenderer from "~/components/BookRenderer";
 import BookForm from "~/components/BookForm";
 
 export default function Home() {
@@ -18,10 +17,7 @@ export default function Home() {
             <AuthShowcase />
           </div>
         </div>
-
-        <div className="flex w-full">
-          <div className="w-1/2">{BookForm()}</div>
-        </div>
+        <div className="w-1/2">{BookForm()}</div>
       </main>
     </>
   );

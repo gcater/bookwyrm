@@ -4,7 +4,7 @@ import Head from "next/head";
 import { api } from "~/utils/api";
 import BookRenderer from "~/components/BookRenderer";
 import { useRouter } from "next/router";
-import EditBook from "~/components/EditBook";
+import BookUpdate from "~/components/BookUpdate";
 
 export default function Home() {
   const router = useRouter();
@@ -20,7 +20,7 @@ export default function Home() {
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center">
         <div className="flex w-full">
-          <div className="w-1/2">{EditBook({ bookId: bookid })}</div>
+          <div className="w-1/2">{BookUpdate({ bookId: bookid })}</div>
           <div className="w-1/2">{BookRenderer({ bookId: bookid })}</div>
         </div>
       </main>
