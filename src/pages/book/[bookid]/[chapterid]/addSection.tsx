@@ -2,8 +2,10 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
 import BookRenderer from "~/components/BookRenderer";
-
 import SectionForm from "~/components/SectionForm";
+import SectionUpdate from "~/components/SectionUpdate";
+import { api } from "~/utils/api";
+
 export default function AddSectionPage() {
   const router = useRouter();
   const bookId = router.query.bookid as string;
@@ -11,13 +13,20 @@ export default function AddSectionPage() {
 
   if (!bookId || !chapterId) return <p>No book or chapter found!</p>;
 
+  const { data: sections, isLoading } = api.book.getSections.useQuery({
+    bookId,
+    chapterId,
+  });
+
+  if (isLoading) return <p>Loading sections...</p>;
+
   return (
     <>
       <Head>
-        <title>Add Section</title>
+        <title>Edit Sections</title>
         <meta
           name="description"
-          content="Add a new section to your book chapter."
+          content="Edit sections of your book chapter."
         />
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center">
@@ -26,6 +35,22 @@ export default function AddSectionPage() {
         </div>
         <div className="flex w-full">
           <div className="w-1/2">
+            {sections
+              ?.sort(
+                (a, b) =>
+                  new Date(a.createdAt).getTime() -
+                  new Date(b.createdAt).getTime(),
+              )
+              .map((section) => (
+                <SectionUpdate
+                  key={section.id}
+                  bookId={bookId}
+                  chapterId={chapterId}
+                  initialTitle={section.title}
+                  sectionId={section.id}
+                  initialContent={section.content}
+                />
+              ))}
             <SectionForm bookId={bookId} chapterId={chapterId} />
           </div>
           <div className="w-1/2">

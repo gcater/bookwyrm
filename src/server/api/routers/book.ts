@@ -2,6 +2,7 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "src/server/api/trpc";
 import { SectionFormSchema } from "~/components/SectionForm";
 import { TRPCError } from "@trpc/server";
+import { SectionUpdateSchema } from "~/components/SectionUpdate";
 
 export const bookRouter = createTRPCRouter({
   createBook: protectedProcedure
@@ -220,5 +221,56 @@ export const bookRouter = createTRPCRouter({
       } else {
         return newSection;
       }
+    }),
+
+  updateSection: protectedProcedure
+    .input(SectionUpdateSchema)
+    .mutation(async ({ ctx, input }) => {
+      // First, ensure the section exists
+      const sectionExists = await ctx.db.section.findUnique({
+        where: { id: input.sectionId },
+      });
+      if (!sectionExists) {
+        throw new Error("Section not found");
+      }
+
+      // Then, update the section with new data
+      const updatedSection = await ctx.db.section.update({
+        where: { id: input.sectionId },
+        data: {
+          title: input.section.title,
+          content: input.section.content,
+        },
+      });
+
+      return updatedSection;
+    }),
+
+  getSections: protectedProcedure
+    .input(z.object({ bookId: z.string(), chapterId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      // Check if the book exists
+      const bookExists = await ctx.db.book.findUnique({
+        where: { id: input.bookId },
+      });
+      if (!bookExists) {
+        throw new Error("Book not found");
+      }
+
+      // Check if the chapter exists within the book
+      const chapterExists = await ctx.db.chapter.findFirst({
+        where: {
+          id: input.chapterId,
+          bookId: input.bookId,
+        },
+      });
+      if (!chapterExists) {
+        throw new Error("Chapter not found in the specified book");
+      }
+
+      const sections = await ctx.db.section.findMany({
+        where: { chapterId: input.chapterId },
+      });
+      return sections;
     }),
 });
