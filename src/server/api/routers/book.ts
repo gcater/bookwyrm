@@ -2,6 +2,7 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "src/server/api/trpc";
 import { SectionFormSchema } from "~/components/SectionForm";
 import { TRPCError } from "@trpc/server";
+import { SectionUpdateSchema } from "~/components/SectionUpdate";
 
 export const bookRouter = createTRPCRouter({
   createBook: protectedProcedure
@@ -23,7 +24,6 @@ export const bookRouter = createTRPCRouter({
       return book;
     }),
   getBook: protectedProcedure
-
     .input(z.string())
     .query(async ({ ctx, input }) => {
       console.log(`Fetching book with ID: ${input}`); // Added console.log for debugging
@@ -153,7 +153,6 @@ export const bookRouter = createTRPCRouter({
       });
       const newChapter =
         updatedBook.chapters?.[updatedBook.chapters.length - 1];
-      // Return the updated book could this just be a chapter?
       if (!newChapter) {
         throw new Error("Chapter creation failed");
       } else {
@@ -220,5 +219,28 @@ export const bookRouter = createTRPCRouter({
       } else {
         return newSection;
       }
+    }),
+
+  updateSection: protectedProcedure
+    .input(SectionUpdateSchema)
+    .mutation(async ({ ctx, input }) => {
+      // First, ensure the section exists
+      const sectionExists = await ctx.db.section.findUnique({
+        where: { id: input.sectionId },
+      });
+      if (!sectionExists) {
+        throw new Error("Section not found");
+      }
+
+      // Then, update the section with new data
+      const updatedSection = await ctx.db.section.update({
+        where: { id: input.sectionId },
+        data: {
+          title: input.section.title,
+          content: input.section.content,
+        },
+      });
+
+      return updatedSection;
     }),
 });

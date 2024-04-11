@@ -5,9 +5,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { api } from "~/utils/api";
 
-interface SectionFormProps {
+interface SectionUpdateProps {
   bookId: string;
   chapterId: string;
+  sectionId: string;
+  initialTitle: string;
+  initialContent: string;
 }
 
 const SectionInputSchema = z.object({
@@ -24,15 +27,22 @@ const SectionInputSchema = z.object({
   }),
 });
 
-export const SectionFormSchema = z.object({
+export const SectionUpdateSchema = z.object({
   section: SectionInputSchema,
   bookId: z.string(),
   chapterId: z.string(),
+  sectionId: z.string(),
 });
 
-const SectionForm = ({ bookId, chapterId }: SectionFormProps): JSX.Element => {
+const SectionUpdate = ({
+  bookId,
+  chapterId,
+  sectionId,
+  initialTitle,
+  initialContent,
+}: SectionUpdateProps): JSX.Element => {
   const { refetch: refetchBook } = api.book.getBook.useQuery(bookId);
-  const { mutate: addSection } = api.book.addSection.useMutation({
+  const { mutate: updateSection } = api.book.updateSection.useMutation({
     onSuccess: (responseData) => {
       if (responseData && "id" in responseData) {
         void refetchBook();
@@ -42,24 +52,26 @@ const SectionForm = ({ bookId, chapterId }: SectionFormProps): JSX.Element => {
       console.error(error);
     },
   });
-  function handleCreate(values: z.infer<typeof SectionInputSchema>): void {
-    addSection({
+  function handleUpdate(values: z.infer<typeof SectionInputSchema>): void {
+    updateSection({
       section: values,
       bookId,
       chapterId,
+      sectionId,
     });
   }
   return (
     <div className="p-6">
       <Card>
         <CardHeader>
-          <CardTitle>Section Form</CardTitle>
+          <CardTitle>Section update</CardTitle>
         </CardHeader>
         <CardContent>
           <AutoForm
             // Pass the schema to the form
             formSchema={SectionInputSchema}
-            onSubmit={handleCreate}
+            values={{ title: initialTitle, content: initialContent }}
+            onSubmit={handleUpdate}
           >
             <Button type="submit">Send now</Button>
           </AutoForm>
@@ -69,4 +81,4 @@ const SectionForm = ({ bookId, chapterId }: SectionFormProps): JSX.Element => {
   );
 };
 
-export default SectionForm;
+export default SectionUpdate;
