@@ -19,7 +19,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="flex w-full">{BookForm()}</div>
+        <div className="w-1/2">{BookForm()}</div>
       </main>
     </>
   );
