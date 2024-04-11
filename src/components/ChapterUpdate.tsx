@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { api } from "~/utils/api";
 
 import React from "react";
+import Link from "next/link";
 const ChapterInputSchema = z.object({
   title: z
     .string({
@@ -62,12 +63,12 @@ const ChapterUpdate = ({
         </CardContent>
         {chapterId && bookId && (
           <CardContent>
-            <a
+            <Link
               href={`/book/${bookId}/${chapterId}/addSection`}
               className="button-class"
             >
               Add Section
-            </a>
+            </Link>
           </CardContent>
         )}
       </Card>
