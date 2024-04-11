@@ -24,7 +24,6 @@ export const bookRouter = createTRPCRouter({
       return book;
     }),
   getBook: protectedProcedure
-
     .input(z.string())
     .query(async ({ ctx, input }) => {
       console.log(`Fetching book with ID: ${input}`); // Added console.log for debugging
@@ -154,7 +153,6 @@ export const bookRouter = createTRPCRouter({
       });
       const newChapter =
         updatedBook.chapters?.[updatedBook.chapters.length - 1];
-      // Return the updated book could this just be a chapter?
       if (!newChapter) {
         throw new Error("Chapter creation failed");
       } else {
@@ -244,33 +242,5 @@ export const bookRouter = createTRPCRouter({
       });
 
       return updatedSection;
-    }),
-
-  getSections: protectedProcedure
-    .input(z.object({ bookId: z.string(), chapterId: z.string() }))
-    .query(async ({ ctx, input }) => {
-      // Check if the book exists
-      const bookExists = await ctx.db.book.findUnique({
-        where: { id: input.bookId },
-      });
-      if (!bookExists) {
-        throw new Error("Book not found");
-      }
-
-      // Check if the chapter exists within the book
-      const chapterExists = await ctx.db.chapter.findFirst({
-        where: {
-          id: input.chapterId,
-          bookId: input.bookId,
-        },
-      });
-      if (!chapterExists) {
-        throw new Error("Chapter not found in the specified book");
-      }
-
-      const sections = await ctx.db.section.findMany({
-        where: { chapterId: input.chapterId },
-      });
-      return sections;
     }),
 });

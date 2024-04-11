@@ -13,11 +13,15 @@ export default function AddSectionPage() {
 
   if (!bookId || !chapterId) return <p>No book or chapter found!</p>;
 
-  const { data: sections, isLoading } = api.book.getSections.useQuery({
-    bookId,
-    chapterId,
-  });
-
+  const { data: retrivedBook, isLoading } = api.book.getBook.useQuery(bookId);
+  const chapters =
+    retrivedBook && Array.isArray(retrivedBook.chapters)
+      ? retrivedBook.chapters
+      : [];
+  const chapter = chapters.find((c) => c.id === chapterId);
+  const sections = chapter?.sections ?? [];
+  if (!retrivedBook) return <p>No book found!</p>;
+  if (!chapter) return <p>No chapter found!</p>;
   if (isLoading) return <p>Loading sections...</p>;
 
   return (
@@ -35,22 +39,16 @@ export default function AddSectionPage() {
         </div>
         <div className="flex w-full">
           <div className="w-1/2">
-            {sections
-              ?.sort(
-                (a, b) =>
-                  new Date(a.createdAt).getTime() -
-                  new Date(b.createdAt).getTime(),
-              )
-              .map((section) => (
-                <SectionUpdate
-                  key={section.id}
-                  bookId={bookId}
-                  chapterId={chapterId}
-                  initialTitle={section.title}
-                  sectionId={section.id}
-                  initialContent={section.content}
-                />
-              ))}
+            {sections.map((section) => (
+              <SectionUpdate
+                key={section.id}
+                bookId={bookId}
+                chapterId={chapterId}
+                initialTitle={section.title}
+                sectionId={section.id}
+                initialContent={section.content}
+              />
+            ))}
             <SectionForm bookId={bookId} chapterId={chapterId} />
           </div>
           <div className="w-1/2">

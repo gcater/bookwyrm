@@ -42,24 +42,17 @@ const SectionUpdate = ({
   initialContent,
 }: SectionUpdateProps): JSX.Element => {
   const { refetch: refetchBook } = api.book.getBook.useQuery(bookId);
-  const { refetch: refetchChapters } = api.book.getChapters.useQuery(bookId);
-  const { refetch: refetchSections } = api.book.getSections.useQuery({
-    bookId,
-    chapterId,
-  });
   const { mutate: updateSection } = api.book.updateSection.useMutation({
     onSuccess: (responseData) => {
       if (responseData && "id" in responseData) {
         void refetchBook();
-        void refetchChapters();
-        void refetchSections();
       }
     },
     onError: (error) => {
       console.error(error);
     },
   });
-  function handleSubmit(values: z.infer<typeof SectionInputSchema>): void {
+  function handleUpdate(values: z.infer<typeof SectionInputSchema>): void {
     updateSection({
       section: values,
       bookId,
@@ -78,7 +71,7 @@ const SectionUpdate = ({
             // Pass the schema to the form
             formSchema={SectionInputSchema}
             values={{ title: initialTitle, content: initialContent }}
-            onSubmit={handleSubmit}
+            onSubmit={handleUpdate}
           >
             <Button type="submit">Send now</Button>
           </AutoForm>

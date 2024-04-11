@@ -32,25 +32,18 @@ export const SectionFormSchema = z.object({
 
 const SectionForm = ({ bookId, chapterId }: SectionFormProps): JSX.Element => {
   const { refetch: refetchBook } = api.book.getBook.useQuery(bookId);
-  const { refetch: refetchChapters } = api.book.getChapters.useQuery(bookId);
-  const { refetch: refetchSections } = api.book.getSections.useQuery({
-    bookId,
-    chapterId,
-  });
-  const { mutate } = api.book.addSection.useMutation({
+  const { mutate: addSection } = api.book.addSection.useMutation({
     onSuccess: (responseData) => {
       if (responseData && "id" in responseData) {
         void refetchBook();
-        void refetchChapters();
-        void refetchSections();
       }
     },
     onError: (error) => {
       console.error(error);
     },
   });
-  function handleSubmit(values: z.infer<typeof SectionInputSchema>): void {
-    mutate({
+  function handleCreate(values: z.infer<typeof SectionInputSchema>): void {
+    addSection({
       section: values,
       bookId,
       chapterId,
@@ -66,7 +59,7 @@ const SectionForm = ({ bookId, chapterId }: SectionFormProps): JSX.Element => {
           <AutoForm
             // Pass the schema to the form
             formSchema={SectionInputSchema}
-            onSubmit={handleSubmit}
+            onSubmit={handleCreate}
           >
             <Button type="submit">Send now</Button>
           </AutoForm>
