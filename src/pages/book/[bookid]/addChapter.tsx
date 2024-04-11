@@ -23,7 +23,7 @@ export default function AddChapterPage() {
             <AutoChapterForm bookId={bookId} />
           </div>
           <div className="w-1/2">
-            <BookRenderer />
+            <BookRenderer bookId={bookId} />
           </div>
         </div>
       </main>
