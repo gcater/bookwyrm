@@ -4,6 +4,7 @@ import * as z from "zod";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { api } from "~/utils/api";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 
 interface SectionUpdateProps {
   bookId: string;
@@ -52,6 +53,13 @@ const SectionUpdate = ({
       console.error(error);
     },
   });
+  const { mutate: deleteSection } = api.book.deleteSection.useMutation({
+    onSuccess: (responseData) => {
+      if (responseData && "id" in responseData) {
+        void refetchBook();
+      }
+    },
+  });
   function handleUpdate(values: z.infer<typeof SectionInputSchema>): void {
     updateSection({
       section: values,
@@ -75,6 +83,20 @@ const SectionUpdate = ({
           >
             <Button type="submit">Send now</Button>
           </AutoForm>
+        </CardContent>
+        <CardContent>
+          <Popover>
+            <PopoverTrigger>
+              <Button>Delete Section</Button>
+            </PopoverTrigger>
+            <PopoverContent>
+              <Button
+                onClick={() => deleteSection({ bookId, chapterId, sectionId })}
+              >
+                Confirm Delete
+              </Button>
+            </PopoverContent>
+          </Popover>
         </CardContent>
       </Card>
     </div>
