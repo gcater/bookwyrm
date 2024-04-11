@@ -23,8 +23,10 @@ export const bookRouter = createTRPCRouter({
       return book;
     }),
   getBook: protectedProcedure
+
     .input(z.string())
     .query(async ({ ctx, input }) => {
+      console.log(`Fetching book with ID: ${input}`); // Added console.log for debugging
       const book = await ctx.db.book.findUnique({
         where: { id: input },
         include: {
@@ -105,6 +107,7 @@ export const bookRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      console.log("Attempting to add a chapter to book with ID:", input.bookId); // Added console.log as per instruction
       // First, ensure the book exists
       const bookExists = await ctx.db.book.findUnique({
         where: { id: input.bookId },
@@ -135,6 +138,54 @@ export const bookRouter = createTRPCRouter({
       } else {
         return newChapter;
       }
+    }),
+  updateChapter: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        title: z.string(),
+        bookId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      // First, check if the chapter exists
+      const chapterExists = await ctx.db.chapter.findUnique({
+        where: { id: input.id },
+      });
+      if (!chapterExists) {
+        throw new Error("Chapter not found");
+      }
+
+      // Then, proceed to update the chapter
+      try {
+        const updatedChapter = await ctx.db.chapter.update({
+          where: { id: input.id },
+          data: {
+            title: input.title,
+          },
+        });
+        return updatedChapter;
+      } catch (error) {
+        throw new Error("Failed to update chapter");
+      }
+    }),
+
+  getChapters: protectedProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      // Check if the book exists before fetching chapters
+      const bookExists = await ctx.db.book.findUnique({
+        where: { id: input },
+      });
+      if (!bookExists) {
+        throw new Error("Book not found");
+      }
+
+      const chapters = await ctx.db.chapter.findMany({
+        where: { bookId: input },
+        include: { sections: true },
+      });
+      return chapters;
     }),
   // mutation to add a section to a chapter in a book
   addSection: protectedProcedure
