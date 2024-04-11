@@ -10,6 +10,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import router from "next/router";
 
 const BookInputSchema = z.object({
   title: z
@@ -29,7 +30,7 @@ const BookInputSchema = z.object({
     }),
 });
 
-const BookUpdate = ({ bookId }: { bookId: string }): JSX.Element => {
+const EditBook = ({ bookId }: { bookId: string }): JSX.Element => {
   const { data: queryData, refetch: refetchBook } =
     api.book.getBook.useQuery(bookId);
 
@@ -41,7 +42,7 @@ const BookUpdate = ({ bookId }: { bookId: string }): JSX.Element => {
   });
   const { mutate: deleteBook } = api.book.deleteBook.useMutation({
     onSuccess: () => {
-      window.location.href = "/";
+      void router.push("/");
     },
   });
 
@@ -78,7 +79,9 @@ const BookUpdate = ({ bookId }: { bookId: string }): JSX.Element => {
           <>
             <CardContent>
               <Button>
-                <a href={`/book/${bookId}/addChapter`}>Add Chapter</a>
+                <a onClick={() => router.push(`/book/${bookId}/addChapter`)}>
+                  Add Chapter
+                </a>
               </Button>
             </CardContent>
             <CardContent>
@@ -100,4 +103,4 @@ const BookUpdate = ({ bookId }: { bookId: string }): JSX.Element => {
   );
 };
 
-export default BookUpdate;
+export default EditBook;
