@@ -1,7 +1,9 @@
 import React from "react";
-import ReactMarkdown from "react-markdown";
+// import ReactMarkdown from "react-markdown";
 import { api } from "~/utils/api";
 import { useRouter } from "next/router";
+import Example from "./example.mdx";
+import Link from "next/link";
 
 const SectionRenderer = ({
   bookId,
@@ -23,11 +25,31 @@ const SectionRenderer = ({
 
   const section = chapter.sections.find((section) => section.id === sectionId);
   if (!section) return <div>No section found</div>;
-
+  console.log(Example);
   return (
     <div>
-      <h3 className="mb-2 text-lg font-semibold">{section.title}</h3>
-      <ReactMarkdown>{section.content}</ReactMarkdown>
+      <div>
+        <h1>This is a markdown file</h1>
+        <p>
+          <strong>bold</strong>
+        </p>
+        <p>
+          <em>italic</em>
+        </p>
+        {/* Assuming /n was meant to be a line break or new paragraph */}
+        <p></p> {/* For a new paragraph, or use <br /> for a line break */}
+        <h6>It is using a custom link component</h6>
+        <p>hello</p>
+        {/* Assuming "===============" is meant to underline or separate content */}
+        <hr />{" "}
+        <blockquote>
+          <p>This is a blockquote</p>
+          <p>This is a blockquote</p>
+          <p>This is a blockquote</p>
+        </blockquote>
+        {/* <hr /> is used for a thematic break (horizontal rule) in HTML */}
+      </div>
+      <Example />
     </div>
   );
 };

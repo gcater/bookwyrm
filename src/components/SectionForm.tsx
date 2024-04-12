@@ -58,8 +58,14 @@ const SectionForm = ({ bookId, chapterId }: SectionFormProps): JSX.Element => {
         <CardContent>
           <AutoForm
             // Pass the schema to the form
+
             formSchema={SectionInputSchema}
             onSubmit={handleCreate}
+            fieldConfig={{
+              content: {
+                fieldType: "textarea",
+              },
+            }}
           >
             <Button type="submit">Send now</Button>
           </AutoForm>
