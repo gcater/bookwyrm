@@ -243,4 +243,74 @@ export const bookRouter = createTRPCRouter({
 
       return updatedSection;
     }),
+
+  deleteChapter: protectedProcedure
+    .input(z.object({ bookId: z.string(), chapterId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      // Check if the book exists
+      const bookExists = await ctx.db.book.findUnique({
+        where: { id: input.bookId },
+      });
+      if (!bookExists) {
+        throw new Error("Book not found");
+      }
+
+      // Check if the chapter exists within the book
+      const chapterExists = await ctx.db.chapter.findFirst({
+        where: {
+          id: input.chapterId,
+          bookId: input.bookId,
+        },
+      });
+      if (!chapterExists) {
+        throw new Error("Chapter not found in the specified book");
+      }
+      const deletedChapter = await ctx.db.chapter.delete({
+        where: { id: input.chapterId },
+      });
+      return deletedChapter;
+    }),
+
+  deleteSection: protectedProcedure
+    .input(
+      z.object({
+        bookId: z.string(),
+        chapterId: z.string(),
+        sectionId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      // Check if the book exists
+      const bookExists = await ctx.db.book.findUnique({
+        where: { id: input.bookId },
+      });
+      if (!bookExists) {
+        throw new Error("Book not found");
+      }
+
+      // Check if the chapter exists within the book
+      const chapterExists = await ctx.db.chapter.findFirst({
+        where: {
+          id: input.chapterId,
+          bookId: input.bookId,
+        },
+      });
+      if (!chapterExists) {
+        throw new Error("Chapter not found in the specified book");
+      }
+
+      // Check if the section exists
+      const sectionExists = await ctx.db.section.findUnique({
+        where: { id: input.sectionId },
+      });
+      if (!sectionExists) {
+        throw new Error("Section not found in the specified chapter");
+      }
+
+      // Delete the section
+      const deletedSection = await ctx.db.section.delete({
+        where: { id: input.sectionId },
+      });
+      return deletedSection;
+    }),
 });

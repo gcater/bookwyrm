@@ -7,6 +7,7 @@ import { api } from "~/utils/api";
 
 import React from "react";
 import Link from "next/link";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 const ChapterInputSchema = z.object({
   title: z
     .string({
@@ -31,6 +32,11 @@ const ChapterUpdate = ({
   const { refetch: refetchBook } = api.book.getBook.useQuery(bookId);
 
   const { mutate: updateChapter } = api.book.updateChapter.useMutation({
+    onSuccess: () => {
+      void refetchBook();
+    },
+  });
+  const { mutate: deleteChapter } = api.book.deleteChapter.useMutation({
     onSuccess: () => {
       void refetchBook();
     },
@@ -69,6 +75,18 @@ const ChapterUpdate = ({
             </Link>
           </CardContent>
         )}
+        <CardContent>
+          <Popover>
+            <PopoverTrigger>
+              <Button>Delete Chapter</Button>
+            </PopoverTrigger>
+            <PopoverContent>
+              <Button onClick={() => deleteChapter({ bookId, chapterId })}>
+                Confirm Delete
+              </Button>
+            </PopoverContent>
+          </Popover>
+        </CardContent>
       </Card>
     </div>
   );

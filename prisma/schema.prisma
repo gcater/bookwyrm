@@ -92,7 +92,7 @@ model Chapter {
 
     title    String
     sections Section[]
-    book     Book      @relation(fields: [bookId], references: [id])
+    book     Book      @relation(fields: [bookId], references: [id], onDelete: Cascade)
     bookId   String
 }
 
@@ -103,6 +103,6 @@ model Section {
 
     title     String
     content   String
-    chapter   Chapter @relation(fields: [chapterId], references: [id])
+    chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
     chapterId String
 }
