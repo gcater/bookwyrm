@@ -60,5 +60,4 @@ const BookRenderer = ({ bookId }: { bookId: string }) => {
     </div>
   );
 };
-
 export default BookRenderer;
