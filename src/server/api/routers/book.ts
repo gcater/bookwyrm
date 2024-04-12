@@ -71,18 +71,6 @@ export const bookRouter = createTRPCRouter({
   deleteBook: protectedProcedure
     .input(z.object({ bookId: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      // Fetch all chapters of the book
-      const chapters = await ctx.db.chapter.findMany({
-        where: { bookId: input.bookId },
-      });
-
-      // Delete all chapters of the book
-      for (const chapter of chapters) {
-        await ctx.db.chapter.delete({
-          where: { id: chapter.id },
-        });
-      }
-      // Finally, delete the book
       const deletedBook = await ctx.db.book.delete({
         where: { id: input.bookId },
       });
@@ -277,13 +265,6 @@ export const bookRouter = createTRPCRouter({
       if (!chapterExists) {
         throw new Error("Chapter not found in the specified book");
       }
-
-      // First, delete all sections associated with the chapter
-      await ctx.db.section.deleteMany({
-        where: { chapterId: input.chapterId },
-      });
-
-      // Then, delete the chapter itself
       const deletedChapter = await ctx.db.chapter.delete({
         where: { id: input.chapterId },
       });
