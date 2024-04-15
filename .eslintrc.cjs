@@ -38,6 +38,5 @@ const config = {
       }
     ]
   },
-  "ignorePatterns": ["src/components/ui/auto-form/"],
 }
 module.exports = config;

@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { api } from "~/utils/api";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { useRouter } from "next/router";
 
 interface SectionUpdateProps {
   bookId: string;
@@ -53,14 +54,16 @@ const SectionUpdate = ({
       console.error(error);
     },
   });
+  const router = useRouter();
   const { mutate: deleteSection } = api.book.deleteSection.useMutation({
     onSuccess: (responseData) => {
       if (responseData && "id" in responseData) {
         void refetchBook();
         if (
-          window.location.pathname !== `/book/${bookId}/${chapterId}/addSection`
+          router.pathname ==
+          `/book/${bookId}/${chapterId}/${sectionId}/index.tsx`
         ) {
-          window.open(`/book/${bookId}/${chapterId}/addSection`, "_blank");
+          void router.push(`/book/${bookId}`);
         }
       }
     },
