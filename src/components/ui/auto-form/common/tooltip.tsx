@@ -1,12 +1,5 @@
-interface FieldConfigItem {
-  description?: string;
-}
-
-function AutoFormTooltip({
-  fieldConfigItem,
-}: {
-  fieldConfigItem: FieldConfigItem;
-}) {
+/* eslint-disable */
+function AutoFormTooltip({ fieldConfigItem }: { fieldConfigItem: any }) {
   return (
     <>
       {fieldConfigItem?.description && (
