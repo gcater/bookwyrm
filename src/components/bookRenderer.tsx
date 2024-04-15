@@ -1,39 +1,70 @@
 import React from "react";
 import { api } from "~/utils/api";
 
-import { useRouter } from "next/router";
+// import { useRouter } from "next/router";
+import Link from "next/link";
 
 const BookRenderer = ({ bookId }: { bookId: string }) => {
-  const router = useRouter(); // This ensures `router` is correctly typed
+  // const router = useRouter(); // This ensures `router` is correctly typed
   const { data: book, isLoading } = api.book.getBook.useQuery(bookId);
 
   if (isLoading) return <div>Loading...</div>;
   if (!book) return <div>No books found</div>;
 
   return (
-    <div>
-      {/* Displaying the book name and author name */}
-      <h1>{book.title}</h1>
-      <h2>By {book.author}</h2>
+    <div className="mx-auto flex max-w-md flex-col font-serif">
+      {/* Displaying the book name and author name together */}
+      {/* <h3>
+        {book.title} - By {book.author}
+      </h3> */}
+      <div className="text-gray-700">
+        <h5>
+          <strong>Description</strong>
+        </h5>
+        <p>
+          Technology has enabled us to start new companies, new communities, and
+          new currencies. But can we use it to start new cities, or even new
+          countries? This book explains how to build the successor to the nation
+          state, a concept we call the network state.
+        </p>
+        <div className="my-4"></div>
+        <div className="border-t border-gray-300" />
+        <div className="my-4"></div>
+      </div>
+
       <div>
         {book.chapters &&
           book.chapters.length > 0 &&
           book.chapters.map((chapter, chapterIndex) => (
             <div key={chapterIndex} className="mb-4">
-              {/* Displaying the chapter title */}
-              <h3>{chapter.title}</h3>
-              {chapter.sections &&
-                chapter.sections.length > 0 &&
-                chapter.sections.map((section, sectionIndex) => (
-                  <a
-                    key={sectionIndex}
-                    onClick={() =>
-                      router.push(`/book/${bookId}/${chapter.id}/${section.id}`)
-                    }
-                  >
-                    {section.title}
-                  </a>
-                ))}
+              <Link
+                href={`/book/${bookId}/${chapter.id}/${chapter?.sections?.[0]?.id}`}
+              >
+                <h3>{`${chapterIndex + 1}. ${chapter.title}`}</h3>
+              </Link>
+              {chapter.sections && chapter.sections.length > 0 && (
+                <div className="flex flex-col">
+                  {chapter.sections.map((section, sectionIndex) => (
+                    <div
+                      key={sectionIndex}
+                      className={
+                        "border-l border-r border-t border-gray-300 first:rounded-t-lg last:rounded-b-lg last:border-b   hover:bg-gray-100"
+                      }
+                    >
+                      <Link
+                        href={`/book/${bookId}/${chapter.id}/${section.id}`}
+                        className="cursor-pointer text-black"
+                      >
+                        <div className=" py-2">
+                          {/* Wrap the Link in a div with padding for the text only */}
+
+                          <div className="px-4">{section.title}</div>
+                        </div>
+                      </Link>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
       </div>

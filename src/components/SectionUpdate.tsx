@@ -60,8 +60,7 @@ const SectionUpdate = ({
       if (responseData && "id" in responseData) {
         void refetchBook();
         if (
-          router.pathname ==
-          `/book/${bookId}/${chapterId}/${sectionId}/index.tsx`
+          router.pathname == `/book/${bookId}/${chapterId}/${sectionId}/index`
         ) {
           void router.push(`/book/${bookId}`);
         }
