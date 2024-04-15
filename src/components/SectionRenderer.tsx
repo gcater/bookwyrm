@@ -4,7 +4,6 @@ import { api } from "~/utils/api";
 import { useRouter } from "next/router";
 // Assuming Example is not used for Markdown rendering, so it can remain commented out
 // import Example from "./example.mdx";
-import Link from "next/link";
 
 const SectionRenderer = ({
   bookId,
@@ -15,7 +14,6 @@ const SectionRenderer = ({
   chapterId: string;
   sectionId: string;
 }) => {
-  const router = useRouter(); // This ensures `router` is correctly typed
   const { data: book, isLoading } = api.book.getBook.useQuery(bookId);
 
   if (isLoading) return <div>Loading...</div>;

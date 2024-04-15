@@ -1,7 +1,5 @@
 "use client";
-import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
-import { api } from "~/utils/api";
 import BookRenderer from "~/components/BookRenderer";
 import { useRouter } from "next/router";
 import BookUpdate from "~/components/BookUpdate";

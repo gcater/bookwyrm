@@ -1,4 +1,12 @@
-function AutoFormTooltip({ fieldConfigItem }: { fieldConfigItem: any }) {
+interface FieldConfigItem {
+  description?: string;
+}
+
+function AutoFormTooltip({
+  fieldConfigItem,
+}: {
+  fieldConfigItem: FieldConfigItem;
+}) {
   return (
     <>
       {fieldConfigItem?.description && (
