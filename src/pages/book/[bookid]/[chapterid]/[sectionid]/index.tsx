@@ -52,7 +52,6 @@ export default function ShowSectionPage() {
                 initialContent={section.content}
               />
             ))}
-            <SectionForm bookId={bookId} chapterId={chapterId} />
           </div>
           <div className="w-1/2">
             <SectionRenderer

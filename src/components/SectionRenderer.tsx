@@ -1,7 +1,6 @@
 import React from "react";
 import ReactMarkdown from "react-markdown"; // Uncomment this
 import { api } from "~/utils/api";
-import { useRouter } from "next/router";
 // Assuming Example is not used for Markdown rendering, so it can remain commented out
 // import Example from "./example.mdx";
 
