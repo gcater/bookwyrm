@@ -1,22 +1,24 @@
-/**
- * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially useful
- * for Docker builds.
- */
-await import("./src/env.js");
+import nextMDX from '@next/mdx';
 
-/** @type {import("next").NextConfig} */
+const withMDX = nextMDX({
+  extension: /\.mdx?$/,
+  options: {
+    remarkPlugins: [],
+    rehypePlugins: [],
+  },
+});
+
 const config = {
   reactStrictMode: true,
-
-  /**
-   * If you are using `appDir` then you must comment the below `i18n` config out.
-   *
-   * @see https://github.com/vercel/next.js/issues/41980
-   */
   i18n: {
     locales: ["en"],
     defaultLocale: "en",
   },
+  // Add more custom Next.js config options here
 };
 
-export default config;
+// Wrap your config with withMDX and specify any additional MDX related configurations
+export default withMDX({
+  ...config, // Spread the existing config
+  pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'], // Specify page extensions
+});

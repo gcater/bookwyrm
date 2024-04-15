@@ -78,6 +78,11 @@ const SectionUpdate = ({
           <AutoForm
             // Pass the schema to the form
             formSchema={SectionInputSchema}
+            fieldConfig={{
+              content: {
+                fieldType: "textarea",
+              },
+            }}
             values={{ title: initialTitle, content: initialContent }}
             onSubmit={handleUpdate}
           >

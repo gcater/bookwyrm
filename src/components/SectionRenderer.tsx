@@ -1,7 +1,10 @@
 import React from "react";
-import ReactMarkdown from "react-markdown";
+import ReactMarkdown from "react-markdown"; // Uncomment this
 import { api } from "~/utils/api";
 import { useRouter } from "next/router";
+// Assuming Example is not used for Markdown rendering, so it can remain commented out
+// import Example from "./example.mdx";
+import Link from "next/link";
 
 const SectionRenderer = ({
   bookId,
@@ -24,12 +27,8 @@ const SectionRenderer = ({
   const section = chapter.sections.find((section) => section.id === sectionId);
   if (!section) return <div>No section found</div>;
 
-  return (
-    <div>
-      <h3 className="mb-2 text-lg font-semibold">{section.title}</h3>
-      <ReactMarkdown>{section.content}</ReactMarkdown>
-    </div>
-  );
+  // Use ReactMarkdown to render the Markdown content
+  return <ReactMarkdown>{section.content}</ReactMarkdown>;
 };
 
 export default SectionRenderer;
