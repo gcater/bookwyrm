@@ -57,6 +57,11 @@ const SectionUpdate = ({
     onSuccess: (responseData) => {
       if (responseData && "id" in responseData) {
         void refetchBook();
+        if (
+          window.location.pathname !== `/book/${bookId}/${chapterId}/addSection`
+        ) {
+          window.open(`/book/${bookId}/${chapterId}/addSection`, "_blank");
+        }
       }
     },
   });
