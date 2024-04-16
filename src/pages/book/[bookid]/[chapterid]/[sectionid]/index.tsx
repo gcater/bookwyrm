@@ -25,7 +25,8 @@ export default function ShowSectionPage() {
   if (!retrievedBook) return <p>No book found!</p>;
   if (!chapter) return <p>No chapter found!</p>;
   if (isLoading) return <p>Loading sections...</p>;
-
+  const section = sections.find((s) => s.id === sectionId);
+  if (!section) return <p>No section found!</p>;
   return (
     <>
       <Head>
@@ -42,16 +43,13 @@ export default function ShowSectionPage() {
         </div>
         <div className="flex w-full">
           <div className="w-1/2">
-            {sections.map((section) => (
-              <SectionUpdate
-                key={section.id}
-                bookId={bookId}
-                chapterId={chapterId}
-                initialTitle={section.title}
-                sectionId={section.id}
-                initialContent={section.content}
-              />
-            ))}
+            <SectionUpdate
+              bookId={bookId}
+              chapterId={chapterId}
+              initialTitle={section.title}
+              sectionId={section.id}
+              initialContent={section.content}
+            />
           </div>
           <div className="w-1/2">
             <SectionRenderer
