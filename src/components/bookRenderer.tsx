@@ -43,24 +43,24 @@ const BookRenderer = ({ bookId }: { bookId: string }) => {
                 <h3>{`${chapterIndex + 1}. ${chapter.title}`}</h3>
               </Link>
               {chapter.sections && chapter.sections.length > 0 && (
-                <div className="flex flex-col">
+                <div className="border-t-rounded border-b-rounded flex flex-col rounded-xl border border-gray-300">
                   {chapter.sections.map((section, sectionIndex) => (
                     <div
                       key={sectionIndex}
-                      className={
-                        "border-l border-r border-t border-gray-300 first:rounded-t-lg last:rounded-b-lg last:border-b   hover:bg-gray-100"
-                      }
+                      className={"border-b border-gray-300 last:border-b-0 "}
                     >
-                      <Link
-                        href={`/book/${bookId}/${chapter.id}/${section.id}`}
-                        className="cursor-pointer text-black"
-                      >
-                        <div className=" py-2">
-                          {/* Wrap the Link in a div with padding for the text only */}
+                      <div className="rounded-xl hover:bg-gray-50">
+                        <Link
+                          href={`/book/${bookId}/${chapter.id}/${section.id}`}
+                          className="cursor-pointer text-black"
+                        >
+                          <div className=" py-2">
+                            {/* Wrap the Link in a div with padding for the text only */}
 
-                          <div className="px-4">{section.title}</div>
-                        </div>
-                      </Link>
+                            <div className="px-4">{section.title}</div>
+                          </div>
+                        </Link>
+                      </div>
                     </div>
                   ))}
                 </div>

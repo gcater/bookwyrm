@@ -23,9 +23,17 @@ const SectionRenderer = ({
 
   const section = chapter.sections.find((section) => section.id === sectionId);
   if (!section) return <div>No section found</div>;
+  // console.log(section.content);
+  // Adjusted for newlines in ReactMarkdown
+  const stringWithLineBreaks =
+    "dslkajflaskjdf\n\nasdflaksjdflasd\nasdf;oasdf\nthis is the string.";
 
-  // Use ReactMarkdown to render the Markdown content
-  return <ReactMarkdown>{section.content}</ReactMarkdown>;
+  const formattedString = stringWithLineBreaks.split("\n").join("  \n");
+
+  // Then use formattedString with ReactMarkdown
+  <ReactMarkdown>{formattedString}</ReactMarkdown>;
+  console.log(formattedString);
+  return <ReactMarkdown className="foo">{section.content}</ReactMarkdown>;
 };
 
 export default SectionRenderer;
