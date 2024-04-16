@@ -18,10 +18,14 @@ export default function Home() {
         <meta name="description" content="BookWyrm - update your book" />
       </Head>
       <TopBanner />
-      <main className="flex min-h-screen flex-col items-center justify-center">
+      <main className="flex min-h-screen flex-col items-start justify-start pt-5">
         <div className="flex w-full">
-          <div className="w-1/2">{BookUpdate({ bookId: bookid })}</div>
-          <div className="w-1/2">{BookRenderer({ bookId: bookid })}</div>
+          <div className="w-1/2">
+            <BookUpdate bookId={bookid} />
+          </div>
+          <div className="w-1/2">
+            <BookRenderer bookId={bookid} />
+          </div>
         </div>
       </main>
     </>

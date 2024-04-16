@@ -9,10 +9,7 @@ const TopBanner = () => {
 
   return (
     <div>
-      <header
-        className="pt0 flex w-full flex-col  bg-white px-4 pb-2
-       pt-4"
-      >
+      <header className=" flex w-full flex-col bg-white  px-4 pb-2 pt-4">
         <h1 className="text-2xl font-bold">BookWyrm</h1>
 
         <div className="absolute right-4 top-2">
@@ -53,15 +50,17 @@ const TopBanner = () => {
         className={`fixed right-4 top-[calc(3rem+21px)] flex items-center ${isDropdownOpen ? "" : "hidden"}`}
       >
         <div className="box-content h-44 w-52 max-w-xl rounded-xl border border-gray-400 bg-white p-4">
-          <Link href="#" className="block py-2 text-lg font-bold">
+          <Link href="#" className="text-md block py-2 font-bold">
             Reviews
           </Link>
-          <Link href="#" className="block py-2 text-lg font-bold">
+          <Link href="#" className="text-md block py-2 font-bold">
             Dashboard
           </Link>
-          <Link href="#" className="block py-2 text-lg font-bold">
+          <Link href="#" className="text-md block py-2 font-bold">
             Twitter
           </Link>
+
+          <div className="pt-[20px]"></div>
           <Button className="w-full rounded-xl"> Subscribe</Button>
         </div>
       </div>

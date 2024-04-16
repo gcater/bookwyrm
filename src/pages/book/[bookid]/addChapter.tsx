@@ -28,7 +28,7 @@ export default function AddChapterPage() {
       </Head>
       <TopBanner />
       <main className="flex min-h-screen flex-col items-center justify-center">
-        <div className="container flex w-full flex-col items-center justify-center gap-12 px-4 py-16">
+        <div className="container flex w-full flex-col items-center justify-center px-4">
           <div className="flex w-full flex-col items-center gap-2"></div>
         </div>
         <div className="flex w-full">
