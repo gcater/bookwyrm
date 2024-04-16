@@ -105,9 +105,12 @@ h6 {
   margin-bottom: 1em;
 }
 
-
+/* Add this to your global CSS or a CSS module */
 .svg-container {
-  cursor: pointer;
-  display: inline-block;
+  --circle-fill-color: white; /* Default fill color */
+}
+
+.svg-container:hover {
+  --circle-fill-color: #F7FAFC; /* Change to grey on hover */
 }
 
