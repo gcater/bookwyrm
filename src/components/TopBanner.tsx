@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Button } from "./ui/button";
+import Link from "next/link";
 
 const TopBanner = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -7,10 +9,13 @@ const TopBanner = () => {
 
   return (
     <div>
-      <header className="flex w-full flex-col border-b border-gray-300 bg-white px-4 py-2">
+      <header
+        className="pt0 flex w-full flex-col  bg-white px-4 pb-2
+       pt-4"
+      >
         <h1 className="text-2xl font-bold">BookWyrm</h1>
 
-        <div className="absolute right-0">
+        <div className="absolute right-4 top-2">
           <div
             className="svg-container cursor-pointer" // Ensure this class is here
             onClick={toggleDropdown}
@@ -18,8 +23,8 @@ const TopBanner = () => {
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="45"
-              height="45"
+              width="50"
+              height="50"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -37,18 +42,32 @@ const TopBanner = () => {
                 fill="var(--circle-fill-color)"
                 stroke="#D1D5DB"
               />
-              <path d="M15 12h.01" strokeWidth="1.5" />
-              <path d="M12 12h.01" strokeWidth="1.5" />
-              <path d="M9 12h.01" strokeWidth="1.5" />
+              <path d="M15 12h.01" strokeWidth="1.4" />
+              <path d="M12 12h.01" strokeWidth="1.4" />
+              <path d="M9 12h.01" strokeWidth="1.4" />
             </svg>
           </div>
         </div>
       </header>
       <div
-        className={`fixed right-4 top-[calc(3rem+12px)] flex items-center ${isDropdownOpen ? "" : "hidden"}`}
+        className={`fixed right-4 top-[calc(3rem+21px)] flex items-center ${isDropdownOpen ? "" : "hidden"}`}
       >
-        <div className="box-content h-32 w-48 max-w-xs rounded-md border border-gray-400 bg-white p-4 shadow-lg"></div>
+        <div className="box-content h-44 w-52 max-w-xl rounded-xl border border-gray-400 bg-white p-4">
+          <Link href="#" className="block py-2 text-lg font-bold">
+            Reviews
+          </Link>
+          <Link href="#" className="block py-2 text-lg font-bold">
+            Dashboard
+          </Link>
+          <Link href="#" className="block py-2 text-lg font-bold">
+            Twitter
+          </Link>
+          <Button className="w-full rounded-xl"> Subscribe</Button>
+        </div>
       </div>
+      <div className="pt-[1px]"></div>
+      {/* This div adds 5 pixels of spacing */}
+      <div className="border-t border-gray-300"></div>
     </div>
   );
 };
