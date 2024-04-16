@@ -104,3 +104,13 @@ h6 {
   font-size: 1em; /* 16px, effectively the same as normal text */
   margin-bottom: 1em;
 }
+
+/* Add this to your global CSS or a CSS module */
+.svg-container {
+  --circle-fill-color: white; /* Default fill color */
+}
+
+.svg-container:hover {
+  --circle-fill-color: #F7FAFC; /* Change to grey on hover */
+}
+

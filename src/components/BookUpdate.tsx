@@ -61,10 +61,10 @@ const BookUpdate = ({ bookId }: { bookId: string }): JSX.Element => {
   };
 
   return (
-    <div className="p-6">
+    <div className="pl-6">
       <Card>
         <CardHeader>
-          <CardTitle>Book Form</CardTitle>
+          <CardTitle>{updatedBook?.title}</CardTitle>
         </CardHeader>
         <CardContent>
           <AutoForm

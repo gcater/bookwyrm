@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { api } from "~/utils/api";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { useRouter } from "next/router";
 
 interface SectionUpdateProps {
   bookId: string;
@@ -53,10 +54,16 @@ const SectionUpdate = ({
       console.error(error);
     },
   });
+  const router = useRouter();
   const { mutate: deleteSection } = api.book.deleteSection.useMutation({
     onSuccess: (responseData) => {
       if (responseData && "id" in responseData) {
         void refetchBook();
+        if (
+          router.pathname == `/book/${bookId}/${chapterId}/${sectionId}/index`
+        ) {
+          void router.push(`/book/${bookId}`);
+        }
       }
     },
   });
@@ -76,7 +83,6 @@ const SectionUpdate = ({
         </CardHeader>
         <CardContent>
           <AutoForm
-            // Pass the schema to the form
             formSchema={SectionInputSchema}
             fieldConfig={{
               content: {

@@ -43,7 +43,7 @@ const ChapterForm = ({ bookId }: ChapterFormProps): JSX.Element => {
     });
   };
   return (
-    <div className="p-6">
+    <div className="pl-6">
       <Card>
         <CardHeader>
           <CardTitle>Chapter Form</CardTitle>
