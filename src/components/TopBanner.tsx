@@ -65,7 +65,6 @@ const TopBanner = () => {
         </div>
       </div>
       <div className="pt-[1px]"></div>
-      {/* This div adds 5 pixels of spacing */}
       <div className="border-t border-gray-300"></div>
     </div>
   );

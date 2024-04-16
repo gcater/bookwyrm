@@ -19,7 +19,7 @@ const SectionBanner = ({ bookId }: { bookId: string }) => {
 
           <div className="absolute right-4 top-2">
             <div
-              className="svg-container cursor-pointer" // Ensure this class is here
+              className="svg-container cursor-pointer"
               onClick={toggleDropdown}
               style={{ display: "inline-block", lineHeight: 0 }}
             >
@@ -101,7 +101,6 @@ const SectionBanner = ({ bookId }: { bookId: string }) => {
           </div>
         </div>
         <div className="pt-[px]"></div>
-        {/* This div adds 5 pixels of spacing */}
         <div className="border-t border-gray-300"></div>
       </div>
     </div>

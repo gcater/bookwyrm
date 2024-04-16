@@ -5,7 +5,6 @@ import { api } from "~/utils/api";
 import Link from "next/link";
 
 const BookRenderer = ({ bookId }: { bookId: string }) => {
-  // const router = useRouter(); // This ensures `router` is correctly typed
   const { data: book, isLoading } = api.book.getBook.useQuery(bookId);
 
   if (isLoading) return <div>Loading...</div>;
