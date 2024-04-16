@@ -1,8 +1,6 @@
 import React from "react";
-import ReactMarkdown from "react-markdown"; // Uncomment this
+import ReactMarkdown from "react-markdown";
 import { api } from "~/utils/api";
-// Assuming Example is not used for Markdown rendering, so it can remain commented out
-// import Example from "./example.mdx";
 
 const SectionRenderer = ({
   bookId,
@@ -23,6 +21,7 @@ const SectionRenderer = ({
 
   const section = chapter.sections.find((section) => section.id === sectionId);
   if (!section) return <div>No section found</div>;
+<<<<<<< HEAD
   // console.log(section.content);
   // Adjusted for newlines in ReactMarkdown
   const stringWithLineBreaks =
@@ -34,6 +33,9 @@ const SectionRenderer = ({
   <ReactMarkdown>{formattedString}</ReactMarkdown>;
   console.log(formattedString);
   return <ReactMarkdown className="foo">{section.content}</ReactMarkdown>;
+=======
+  return <ReactMarkdown>{section.content}</ReactMarkdown>;
+>>>>>>> 736e743 (got git to recognize renaming of BookRenderer, vercel should work now. Also working on taking out unecessary comments)
 };
 
 export default SectionRenderer;

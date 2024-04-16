@@ -1,11 +1,8 @@
 import React from "react";
 import { api } from "~/utils/api";
-
-// import { useRouter } from "next/router";
 import Link from "next/link";
 
 const BookRenderer = ({ bookId }: { bookId: string }) => {
-  // const router = useRouter(); // This ensures `router` is correctly typed
   const { data: book, isLoading } = api.book.getBook.useQuery(bookId);
 
   if (isLoading) return <div>Loading...</div>;
@@ -13,10 +10,6 @@ const BookRenderer = ({ bookId }: { bookId: string }) => {
 
   return (
     <div className="mx-auto flex max-w-md flex-col font-serif">
-      {/* Displaying the book name and author name together */}
-      {/* <h3>
-        {book.title} - By {book.author}
-      </h3> */}
       <div className="text-gray-700">
         <h5>
           <strong>Description</strong>

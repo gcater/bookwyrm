@@ -83,7 +83,6 @@ const SectionUpdate = ({
         </CardHeader>
         <CardContent>
           <AutoForm
-            // Pass the schema to the form
             formSchema={SectionInputSchema}
             fieldConfig={{
               content: {
