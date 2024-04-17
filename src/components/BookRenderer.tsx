@@ -2,6 +2,7 @@ import React from "react";
 import { api } from "~/utils/api";
 
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 const BookRenderer = ({ bookId }: { bookId: string }) => {
   const router = useRouter();
@@ -29,18 +30,14 @@ const BookRenderer = ({ bookId }: { bookId: string }) => {
                 {chapter.sections &&
                   chapter.sections.length > 0 &&
                   chapter.sections.map((section, sectionIndex) => (
-                    <a
+                    <Link
                       key={sectionIndex}
-                      onClick={() =>
-                        router.push(
-                          `/book/${bookId}/${chapter.id}/${section.id}`,
-                        )
-                      }
+                      href={`/book/${bookId}/${chapter.id}/${section.id}`}
                       className="font-inter m-0 box-border flex w-full cursor-pointer flex-row items-center border-b border-gray-300 px-3 py-2 text-sm text-black no-underline first:rounded-t-xl last:rounded-b-xl last:border-none hover:bg-gray-50 active:bg-gray-100"
                     >
                       <div className="clear-button-styles mr-4 rounded-full border border-solid border-gray-300 p-0"></div>
                       {section.title}
-                    </a>
+                    </Link>
                   ))}
               </div>
             </div>
