@@ -1,21 +1,10 @@
 import React from "react";
 import { api } from "~/utils/api";
-import { BellIcon, CheckIcon } from "@radix-ui/react-icons";
 
-import { cn } from "~/lib/utils";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { useRouter } from "next/router";
 
 const BookRenderer = ({ bookId }: { bookId: string }) => {
-  const router = useRouter(); // This ensures `router` is correctly typed
+  const router = useRouter();
   const { data: book, isLoading } = api.book.getBook.useQuery(bookId);
 
   if (isLoading) return <div>Loading...</div>;
