@@ -26,7 +26,7 @@ export default function AddChapterPage() {
         <title>Edit Chapters</title>
         <meta name="description" content="Edit chapters of your book." />
       </Head>
-      <TopBanner />
+      <TopBanner bookId={bookId} />
       <main className="flex min-h-screen flex-col items-center justify-center">
         <div className="container flex w-full flex-col items-center justify-center gap-12 px-4 py-16">
           <div className="flex w-full flex-col items-center gap-2"></div>
