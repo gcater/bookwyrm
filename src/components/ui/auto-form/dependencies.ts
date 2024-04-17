@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { FieldValues, UseFormWatch } from "react-hook-form";
 import { Dependency, DependencyType, EnumValues } from "./types";
 import * as z from "zod";

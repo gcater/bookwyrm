@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { FormControl, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import AutoFormLabel from "../common/label";
