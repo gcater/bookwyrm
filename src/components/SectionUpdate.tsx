@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { api } from "~/utils/api";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-
+import router from "next/router";
 interface SectionUpdateProps {
   bookId: string;
   chapterId: string;
@@ -57,6 +57,9 @@ const SectionUpdate = ({
     onSuccess: (responseData) => {
       if (responseData && "id" in responseData) {
         void refetchBook();
+        if (router.asPath === `/book/${bookId}/${chapterId}/${sectionId}`) {
+          void router.push(`/book/${bookId}/${chapterId}/addSection`);
+        }
       }
     },
   });
