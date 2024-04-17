@@ -32,7 +32,7 @@ const ChapterForm = ({ bookId }: ChapterFormProps): JSX.Element => {
       void refetchBook();
     },
   });
-  const [chapterId, setChapterId] = useState<string | null>(null); // State to store the book ID
+  const [chapterId, setChapterId] = useState<string | null>(null);
 
   const handleSubmit = async ({ title }: { title: string }) => {
     addChapterMutation({

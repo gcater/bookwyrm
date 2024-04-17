@@ -1,7 +1,6 @@
 "use client";
 import Head from "next/head";
 import { useRouter } from "next/router";
-// import BookRenderer from "~/components/BookRenderer";
 import SectionForm from "~/components/SectionForm";
 import SectionRenderer from "~/components/SectionRenderer";
 import SectionUpdate from "~/components/SectionUpdate";

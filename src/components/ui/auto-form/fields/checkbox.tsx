@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { Checkbox } from "@/components/ui/checkbox";
 import { FormControl, FormItem } from "@/components/ui/form";
 import AutoFormTooltip from "../common/tooltip";

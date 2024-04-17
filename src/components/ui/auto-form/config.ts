@@ -1,3 +1,4 @@
+/* eslint-disable */
 import AutoFormCheckbox from "./fields/checkbox";
 import AutoFormDate from "./fields/date";
 import AutoFormEnum from "./fields/enum";

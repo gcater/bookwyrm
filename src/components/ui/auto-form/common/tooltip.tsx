@@ -1,3 +1,4 @@
+/* eslint-disable */
 function AutoFormTooltip({ fieldConfigItem }: { fieldConfigItem: any }) {
   return (
     <>

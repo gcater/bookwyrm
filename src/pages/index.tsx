@@ -27,7 +27,7 @@ function AuthShowcase() {
   const { data: sessionData } = useSession();
 
   const { data: secretMessage } = api.post.getSecretMessage.useQuery(
-    undefined, // no input
+    undefined,
     { enabled: sessionData?.user !== undefined },
   );
   return (
