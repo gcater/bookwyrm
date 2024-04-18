@@ -2,7 +2,6 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
 import SectionBanner from "~/components/SectionBanner";
-import SectionForm from "~/components/SectionForm";
 import SectionRenderer from "~/components/SectionRenderer";
 import SectionUpdate from "~/components/SectionUpdate";
 import { api } from "~/utils/api";
