@@ -1,13 +1,13 @@
 "use client";
 import Head from "next/head";
 import BookRenderer from "~/components/BookRenderer";
-import { useRouter } from "next/router";
+import {useRouter} from "next/router";
 import BookUpdate from "~/components/BookUpdate";
 import TopBanner from "~/components/TopBanner";
-
 export default function Home() {
   const router = useRouter();
   const bookid = router.query.bookid as string;
+ 
   if (!bookid) {
     return <div>Book not found</div>;
   }
@@ -22,7 +22,7 @@ export default function Home() {
         <TopBanner bookId={bookid} />
         <div className="flex min-h-screen flex-col items-center justify-center">
           <div className="flex w-full">
-            <div className="w-1/2">{BookUpdate({ bookId: bookid })}</div>
+            <div className="w-1/2">{BookUpdate({ bookId: bookid })}</div> 
             <div className="w-1/2">{BookRenderer({ bookId: bookid })}</div>
           </div>
         </div>

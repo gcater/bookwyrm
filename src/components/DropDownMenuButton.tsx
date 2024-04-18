@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { LucideProps } from "lucide-react";
 import Link from "next/link";
 import { Button } from "./ui/button";
 const DropDownMenuButton = () => {
@@ -9,7 +8,7 @@ const DropDownMenuButton = () => {
   return (
     <div className="absolute right-4 top-[10px]">
       <div
-        className="svg-container cursor-pointer" // Ensure this class is here
+        className="svg-container cursor-pointer" 
         onClick={toggleDropdown}
         style={{ display: "inline-block", lineHeight: 0 }}
       >
@@ -26,7 +25,6 @@ const DropDownMenuButton = () => {
           className="lucide lucide-circle-ellipsis"
           onClick={toggleDropdown}
         >
-          {/* Apply the CSS variable to the fill attribute */}
           <circle
             cx="12"
             cy="12"
@@ -59,7 +57,6 @@ const DropDownMenuButton = () => {
         </div>
       </div>
       <div className="pt-[1px]"></div>
-      {/* This div adds 5 pixels of spacing */}
     </div>
   );
 };
