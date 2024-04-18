@@ -49,7 +49,9 @@ const DropBookButton = ({ bookId }: { bookId: string }) => {
         <div className="box-content h-auto w-96 max-w-xl rounded-xl border border-gray-400 bg-white">
           
           <div className="w-full">
-            <div className="py-2 px-4 font-serif">
+            <div className="pt-2 px-4 font-bold text-lg font-serif">{book.title}</div>
+            <div className="pb-2 px-4 text-md text-gray-500 font-serif">{book.author}</div>
+            <div className="py-2 px-4 font-serif w-full border-gray-300 border-t">
               <Link href={`/book/${bookId}`}>Home</Link>
             </div>
             {book.chapters &&
@@ -57,7 +59,7 @@ const DropBookButton = ({ bookId }: { bookId: string }) => {
               book.chapters.map((chapter, chapterIndex) => (
                 <div
                   key={chapterIndex}
-                  className="w-full border-gray-300 border-t first:border-t-0"
+                  className="w-full border-gray-300 border-t"
                 >
                   <Link
                     href={`/book/${bookId}/${chapter.id}/${chapter?.sections?.[0]?.id}`}
