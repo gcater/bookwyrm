@@ -46,12 +46,12 @@ const DropBookButton = ({ bookId }: { bookId: string }) => {
       <div
         className={`fixed right-4 top-[calc(3rem+21px)] flex items-center ${isDropdownOpen ? "" : "hidden"}`}
       >
-        <div className="box-content h-auto w-96 max-w-xl rounded-xl border border-gray-400 bg-white">
+        <div className="box-content h-auto w-96 max-w-xl overflow-y-auto rounded-xl border border-gray-400 bg-white">
           
           <div className="w-full">
             <div className="pt-2 px-4 font-bold text-lg font-serif">{book.title}</div>
             <div className="pb-2 px-4 text-md text-gray-500 font-serif">{book.author}</div>
-            <div className="py-2 px-4 font-serif w-full border-gray-300 border-t">
+            <div className="py-2.5 px-5 font-serif w-full border-gray-300 border-t">
               <Link href={`/book/${bookId}`}>Home</Link>
             </div>
             {book.chapters &&
@@ -65,7 +65,7 @@ const DropBookButton = ({ bookId }: { bookId: string }) => {
                     href={`/book/${bookId}/${chapter.id}/${chapter?.sections?.[0]?.id}`}
                   >
                     <div></div>
-                    <div className="py-4 px-4 text-lg font-bold font-serif">{`${chapterIndex + 1}. ${chapter.title}`}</div>
+                    <div className="py-4 px-5 text-lg font-bold font-serif">{`${chapterIndex + 1}. ${chapter.title}`}</div>
                   </Link>
                   {chapter.sections && chapter.sections.length > 0 && (
                     <div className="flex w-full flex-col">
@@ -79,8 +79,8 @@ const DropBookButton = ({ bookId }: { bookId: string }) => {
                               href={`/book/${bookId}/${chapter.id}/${section.id}`}
                               className="cursor-pointer text-black"
                             >
-                              <div className="py-2">
-                                <div className="px-4 font-serif">{section.title}</div>
+                              <div className="py-2.5">
+                                <div className="px-5 font-serif">{section.title}</div>
                               </div>
                             </Link>
                           </div>
