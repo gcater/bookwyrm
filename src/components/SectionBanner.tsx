@@ -12,7 +12,7 @@ const SectionBanner = ({ bookId,sectionId }: { bookId: string,sectionId:string }
         <h1 className="relative top-[-5px] text-2xl font-bold text-gray-700">
           <Link href={`/book/${bookId}`}>BookWyrm</Link>
         </h1>
-        <ProgressBar bookId={bookId}/> 
+        <ProgressBar bookId={bookId} sectionId={sectionId}/> 
         <div className="flex w-full justify-end">
           <DropDownBookButton bookId={bookId} />
         </div>
