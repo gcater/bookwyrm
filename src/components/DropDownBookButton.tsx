@@ -47,19 +47,23 @@ const DropBookButton = ({ bookId }: { bookId: string }) => {
         className={`fixed right-4 top-[calc(3rem+21px)] flex items-center ${isDropdownOpen ? "" : "hidden"}`}
       >
         <div className="box-content h-auto w-96 max-w-xl rounded-xl border border-gray-400 bg-white">
+          
           <div className="w-full">
+            <div className="py-2 px-4 font-serif">
+              <Link href={`/book/${bookId}`}>Home</Link>
+            </div>
             {book.chapters &&
               book.chapters.length > 0 &&
               book.chapters.map((chapter, chapterIndex) => (
                 <div
                   key={chapterIndex}
-                  className="mb-4 w-full border-gray-300 "
+                  className="w-full border-gray-300 border-t first:border-t-0"
                 >
                   <Link
                     href={`/book/${bookId}/${chapter.id}/${chapter?.sections?.[0]?.id}`}
                   >
                     <div></div>
-                    <h3>{`${chapterIndex + 1}. ${chapter.title}`}</h3>
+                    <div className="py-4 px-4 text-lg font-bold font-serif">{`${chapterIndex + 1}. ${chapter.title}`}</div>
                   </Link>
                   {chapter.sections && chapter.sections.length > 0 && (
                     <div className="flex w-full flex-col">
@@ -74,7 +78,7 @@ const DropBookButton = ({ bookId }: { bookId: string }) => {
                               className="cursor-pointer text-black"
                             >
                               <div className="py-2">
-                                <div className="px-4">{section.title}</div>
+                                <div className="px-4 font-serif">{section.title}</div>
                               </div>
                             </Link>
                           </div>
@@ -86,8 +90,6 @@ const DropBookButton = ({ bookId }: { bookId: string }) => {
               ))}
           </div>
         </div>
-        <div className="pt-[px]"></div>
-        <div className="border-t border-gray-300"></div>
       </div>
     </div>
   );
