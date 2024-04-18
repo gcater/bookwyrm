@@ -1,6 +1,7 @@
 "use client";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import SectionBanner from "~/components/SectionBanner";
 import SectionForm from "~/components/SectionForm";
 import SectionRenderer from "~/components/SectionRenderer";
 import SectionUpdate from "~/components/SectionUpdate";
@@ -36,6 +37,7 @@ export default function ShowSectionPage() {
           content="Edit sections of your book chapter."
         />
       </Head>
+      <SectionBanner bookId={bookId} />
       <main className="flex min-h-screen flex-col items-center justify-center">
         <div className="container flex w-full flex-col items-center justify-center gap-12 px-4 py-16">
           <div className="flex w-full flex-col items-center gap-2"></div>

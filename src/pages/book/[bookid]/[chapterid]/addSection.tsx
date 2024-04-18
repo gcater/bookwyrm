@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import BookRenderer from "~/components/BookRenderer";
 import SectionForm from "~/components/SectionForm";
 import SectionUpdate from "~/components/SectionUpdate";
+import TopBanner from "~/components/TopBanner";
 import { api } from "~/utils/api";
 
 export default function AddSectionPage() {
@@ -33,7 +34,9 @@ export default function AddSectionPage() {
           content="Edit sections of your book chapter."
         />
       </Head>
-      <main className="flex min-h-screen flex-col items-center justify-center">
+      <main>
+        <TopBanner bookId={bookId} />
+      <div className="flex min-h-screen flex-col items-center justify-center">
         <div className="container flex w-full flex-col items-center justify-center gap-12 px-4 py-16">
           <div className="flex w-full flex-col items-center gap-2"></div>
         </div>
@@ -54,6 +57,7 @@ export default function AddSectionPage() {
           <div className="w-1/2">
             <BookRenderer bookId={bookId} />
           </div>
+        </div>
         </div>
       </main>
     </>
