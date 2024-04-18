@@ -3,7 +3,7 @@ import DropDownBookButton from "./DropDownBookButton";
 import ProgressBar from "./ProgressBar"
 import Link from "next/link";
 import { api } from "~/utils/api";
-const SectionBanner = ({ bookId,sectionId }: { bookId: string,sectionId:string }) => {
+const SectionBanner = ({ bookId, chapterId, sectionId }: { bookId: string, chapterId:string, sectionId:string }) => {
     const { data: retrievedBook } = api.book.getBook.useQuery(bookId);
     if (!retrievedBook) return <p>No book found!</p>;
   return (
@@ -12,7 +12,7 @@ const SectionBanner = ({ bookId,sectionId }: { bookId: string,sectionId:string }
         <h1 className="relative top-[-5px] text-2xl font-bold text-gray-700">
           <Link href={`/book/${bookId}`}>BookWyrm</Link>
         </h1>
-        <ProgressBar bookId={bookId} sectionId={sectionId}/> 
+        <ProgressBar bookId={bookId} chapterId={chapterId} sectionId={sectionId}/> 
         <div className="flex w-full justify-end">
           <DropDownBookButton bookId={bookId} />
         </div>
