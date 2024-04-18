@@ -30,15 +30,21 @@ const DropBookButton = ({ bookId }: { bookId: string }) => {
         >
           {/* Apply the CSS variable to the fill attribute */}
           <circle
-            cx="12"
-            cy="12"
-            r="10"
-            fill="var(--circle-fill-color)"
-            stroke="#D1D5DB"
-          />
-          <path d="M15 12h.01" strokeWidth="1.2" />
-          <path d="M12 12h.01" strokeWidth="1.2" />
-          <path d="M9 12h.01" strokeWidth="1.2" />
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  fill="var(--circle-fill-color)"
+                  stroke="#D1D5DB"
+                />
+                <circle cx="9" cy="9" r=".25" fill="black" />
+                <line x1="11" y1="9" x2="15" y2="9" strokeWidth=".7" />
+                {/* Dot and line for the middle position */}
+                <circle cx="9" cy="12" r=".25" fill="black" />
+                <line x1="11" y1="12" x2="15" y2="12" strokeWidth=".7" />
+                {/* Dot and line for the bottom position */}
+                <circle cx="9" cy="15" r=".25" fill="black" />
+                <line x1="11" y1="15" x2="15" y2="15" strokeWidth=".7" />
+          
         </svg>
       </div>
 
