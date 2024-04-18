@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import { LucideProps } from "lucide-react";
 import Link from "next/link";
-import { Button } from "./ui/button";
 import { api } from "~/utils/api";
 const DropBookButton = ({ bookId }: { bookId: string }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -11,7 +9,7 @@ const DropBookButton = ({ bookId }: { bookId: string }) => {
   return (
     <div className="absolute right-4 top-[10px]">
       <div
-        className="svg-container cursor-pointer" // Ensure this class is here
+        className="svg-container cursor-pointer" 
         onClick={toggleDropdown}
         style={{ display: "inline-block", lineHeight: 0 }}
       >
@@ -28,22 +26,19 @@ const DropBookButton = ({ bookId }: { bookId: string }) => {
           className="lucide lucide-circle-ellipsis"
           onClick={toggleDropdown}
         >
-          {/* Apply the CSS variable to the fill attribute */}
           <circle
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  fill="var(--circle-fill-color)"
-                  stroke="#D1D5DB"
-                />
-                <circle cx="9" cy="9" r=".25" fill="black" />
-                <line x1="11" y1="9" x2="15" y2="9" strokeWidth=".7" />
-                {/* Dot and line for the middle position */}
-                <circle cx="9" cy="12" r=".25" fill="black" />
-                <line x1="11" y1="12" x2="15" y2="12" strokeWidth=".7" />
-                {/* Dot and line for the bottom position */}
-                <circle cx="9" cy="15" r=".25" fill="black" />
-                <line x1="11" y1="15" x2="15" y2="15" strokeWidth=".7" />
+            cx="12"
+            cy="12"
+            r="10"
+            fill="var(--circle-fill-color)"
+            stroke="#D1D5DB"
+            />
+            <circle cx="9" cy="9" r=".25" fill="black" />
+            <line x1="11" y1="9" x2="15" y2="9" strokeWidth=".7" />
+            <circle cx="9" cy="12" r=".25" fill="black" />
+            <line x1="11" y1="12" x2="15" y2="12" strokeWidth=".7" />
+            <circle cx="9" cy="15" r=".25" fill="black" />
+            <line x1="11" y1="15" x2="15" y2="15" strokeWidth=".7" />
           
         </svg>
       </div>
@@ -91,7 +86,6 @@ const DropBookButton = ({ bookId }: { bookId: string }) => {
               ))}
           </div>
         </div>
-
         <div className="pt-[px]"></div>
         <div className="border-t border-gray-300"></div>
       </div>
