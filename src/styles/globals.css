@@ -112,3 +112,7 @@ h6 {
 .svg-container:hover {
   --circle-fill-color: #F7FAFC; /* Change to grey on hover */
 }
+
+.small-progress {
+  width: 50%;
+}
