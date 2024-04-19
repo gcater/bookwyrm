@@ -106,14 +106,12 @@
   padding-bottom: 0 !important;
   font-style: italic !important;
 }
-
-
-.markdown > ol > li > p {
+.markdown > ol > li{
   margin-top: 1rem !important;
   margin-bottom: 1rem !important;
 }
 
-.markdown > ul > li > p {
+.markdown > ul > li{
   margin-top: 1rem !important;
   margin-bottom: 1rem !important;
 }
