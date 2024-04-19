@@ -50,22 +50,18 @@ const BottomBanner = ({
     ? `/book/${bookId}/${nextSection.chapterId}/${nextSection.id}`
     : "/";
   return (
-    <div className="text-serif flex w-full flex-col py-4">
-      <header className="jusitfy-center flex border-t border-gray-300 bg-white px-4 pt-5">
+    <div className="text-serif flex w-full flex-col pt-4">
+      <header className="jusitfy-center flex border-t border-gray-300 bg-white px-4 py-5">
         <div className="w-[50%]">
-          <h1 className="text-sm font-bold text-black"></h1>
-          Next Section:{" "}
-          <h1 className="font-nobold text-xs text-gray-500 ">
-            {nextSection.title}
+          <h1 className="Black text-sm font-bold">
+            Next Section:{" "}
+            <h1 className="text-xs text-gray-500">{nextSection.title}</h1>
           </h1>
         </div>
 
         <div className="flex w-full justify-end">
           <Button className="w-[85px] items-center rounded-3xl">
-            <Link
-              className="flex items-center gap-1 text-white"
-              href={nextSectionLink}
-            >
+            <Link className="flex items-center gap-1" href={nextSectionLink}>
               Next
             </Link>
             <ChevronRightIcon className="h-4 w-4" />
