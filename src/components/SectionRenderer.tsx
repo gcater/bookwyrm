@@ -1,6 +1,8 @@
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import { api } from "~/utils/api";
+import Example from "./example.mdx";
+import Markdown from "react-markdown";
 
 const SectionRenderer = ({
   bookId,
@@ -21,8 +23,6 @@ const SectionRenderer = ({
 
   const section = chapter.sections.find((section) => section.id === sectionId);
   if (!section) return <div>No section found</div>;
-
-  return <ReactMarkdown>{section.content}</ReactMarkdown>;
+  return <Markdown className="markdown w-full">{section.content}</Markdown>;
 };
-
 export default SectionRenderer;

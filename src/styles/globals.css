@@ -75,35 +75,6 @@
   }
 }
 
-h1 {
-  font-size: 2.5em; /* 40px if the base font size is 16px */
-  margin-bottom: 0.5em;
-}
-
-h2 {
-  font-size: 2em; /* 32px if the base font size is 16px */
-  margin-bottom: 0.75em;
-}
-
-h3 {
-  font-size: 1.75em; /* 28px if the base font size is 16px */
-  margin-bottom: 0.75em;
-}
-
-h4 {
-  font-size: 1.5em; /* 24px if the base font size is 16px */
-  margin-bottom: 0.75em;
-}
-
-h5 {
-  font-size: 1.25em; /* 20px if the base font size is 16px */
-  margin-bottom: 1em;
-}
-
-h6 {
-  font-size: 1em; /* 16px, effectively the same as normal text */
-  margin-bottom: 1em;
-}
 
 .svg-container {
   --circle-fill-color: white; /* Default fill color */
@@ -115,4 +86,23 @@ h6 {
 
 .small-progress {
   width: 50%;
+}
+
+.markdown > * {
+  all: revert;
+}
+
+.markdown > h1 {
+  @apply text-3xl font-bold border-b border-border pb-2 mb-4;
+}
+
+.markdown > blockquote {
+  border-left: 8px solid #9ca3af !important;
+  padding-left: 1rem !important;
+  margin-top: 8px !important;
+  margin-left: 0 !important;
+  margin-bottom: 0 px !important;
+  margin-right: 1rem !important;
+  padding-bottom: 0 !important;
+  font-style: italic !important;
 }
