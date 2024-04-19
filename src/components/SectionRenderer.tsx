@@ -1,6 +1,7 @@
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import { api } from "~/utils/api";
+import BottomBanner from "./BottomBanner";
 
 const SectionRenderer = ({
   bookId,
@@ -22,7 +23,16 @@ const SectionRenderer = ({
   const section = chapter.sections.find((section) => section.id === sectionId);
   if (!section) return <div>No section found</div>;
 
-  return <ReactMarkdown>{section.content}</ReactMarkdown>;
+  return (
+    <div>
+      <ReactMarkdown>{section.content}</ReactMarkdown>
+      <BottomBanner
+        bookId={bookId}
+        chapterId={chapterId}
+        sectionId={sectionId}
+      />
+    </div>
+  );
 };
 
 export default SectionRenderer;
