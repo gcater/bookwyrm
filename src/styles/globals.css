@@ -107,8 +107,21 @@
   font-style: italic !important;
 }
 
+
 .markdown > ol > li > p {
   margin-top: 1rem !important;
   margin-bottom: 1rem !important;
+}
+
+.markdown > ul > li > p {
+  margin-top: 1rem !important;
+  margin-bottom: 1rem !important;
+}
+
+.markdown p > a {
+  color: #1e83d2;
+}
+.markdown > a {
+  color: #1e83d2
 }
 

@@ -21,6 +21,10 @@ const SectionRenderer = ({
 
   const section = chapter.sections.find((section) => section.id === sectionId);
   if (!section) return <div>No section found</div>;
-  return <Markdown className="markdown w-full">{section.content}</Markdown>;
+  return (
+    <Markdown className="markdown w-full font-serif">
+      {section.content}
+    </Markdown>
+  );
 };
 export default SectionRenderer;
