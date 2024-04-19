@@ -41,7 +41,7 @@ export default function ShowSectionPage() {
         chapterId={chapterId}
         sectionId={sectionId}
       />
-      <main className="flex min-h-screen flex-col py-20">
+      <main className="flex min-h-screen flex-col pt-20">
         <div className="flex w-full flex-col items-center gap-2"></div>
 
         <div className="flex w-full">
