@@ -1,7 +1,5 @@
 import React from "react";
-import ReactMarkdown from "react-markdown";
 import { api } from "~/utils/api";
-import Example from "./example.mdx";
 import Markdown from "react-markdown";
 
 const SectionRenderer = ({
