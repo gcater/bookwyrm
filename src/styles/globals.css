@@ -106,3 +106,9 @@
   padding-bottom: 0 !important;
   font-style: italic !important;
 }
+
+.markdown > ol > li > p {
+  margin-top: 1rem !important;
+  margin-bottom: 1rem !important;
+}
+
