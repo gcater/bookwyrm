@@ -36,11 +36,14 @@ export default function ShowSectionPage() {
           content="Edit sections of your book chapter."
         />
       </Head>
-      <SectionBanner bookId={bookId} chapterId={chapterId} sectionId={sectionId} />
-      <main className="flex min-h-screen flex-col items-center justify-center">
-        <div className="container flex w-full flex-col items-center justify-center gap-12 px-4 py-16">
-          <div className="flex w-full flex-col items-center gap-2"></div>
-        </div>
+      <SectionBanner
+        bookId={bookId}
+        chapterId={chapterId}
+        sectionId={sectionId}
+      />
+      <main className="flex min-h-screen flex-col py-20">
+        <div className="flex w-full flex-col items-center gap-2"></div>
+
         <div className="flex w-full">
           <div className="w-1/2">
             <SectionUpdate
@@ -52,7 +55,7 @@ export default function ShowSectionPage() {
               initialContent={section.content}
             />
           </div>
-          <div className="w-1/2">
+          <div className="w-1/2 p-2">
             <SectionRenderer
               bookId={bookId}
               chapterId={chapterId}

@@ -32,7 +32,6 @@ const BookRenderer = ({ bookId }: { bookId: string }) => {
                       href={`/book/${bookId}/${chapter.id}/${section.id}`}
                       className="font-inter m-0 box-border flex w-full cursor-pointer flex-row items-center border-b border-gray-300 px-3 py-2 text-sm text-black no-underline first:rounded-t-xl last:rounded-b-xl last:border-none hover:bg-gray-50 active:bg-gray-100"
                     >
-                      <div className="clear-button-styles mr-4 rounded-full border border-solid border-gray-300 p-0"></div>
                       {section.title}
                     </Link>
                   ))}
