@@ -51,9 +51,9 @@ const BottomBanner = ({
     : "/";
   return (
     <div className="text-serif flex w-full flex-col pt-4">
-      <header className="jusitfy-center flex border-t border-gray-300 bg-white px-4 py-5">
-        <div className="w-[50%]">
-          <h1 className="Black text-sm font-bold">Next Section: </h1>
+      <header className="flex justify-center border-t border-gray-300 bg-white px-4 py-5">
+        <div className="w-1/2">
+          <h1 className="text-sm font-bold">Next Section: </h1>
           <h1 className="text-xs text-gray-500">{nextSection.title}</h1>
         </div>
 
