@@ -24,14 +24,9 @@ const SectionRenderer = ({
   if (!section) return <div>No section found</div>;
   return (
     <>
-      <Markdown className="markdown w-full font-serif">
+      <Markdown className="markdown px-10 font-serif">
         {section.content}
       </Markdown>
-      <BottomBanner
-        bookId={bookId}
-        chapterId={chapterId}
-        sectionId={sectionId}
-      />
     </>
   );
 };
