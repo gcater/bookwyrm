@@ -5,23 +5,20 @@ import SectionBanner from "~/components/SectionBanner";
 import SectionRenderer from "~/components/SectionRenderer";
 import SectionUpdate from "~/components/SectionUpdate";
 import { api } from "~/utils/api";
-import { useState } from "react";
+import React, { useState } from "react";
+import BottomBanner from "~/components/BottomBanner";
 
 export default function ShowSectionPage() {
   const router = useRouter();
   const bookId = router.query.bookid as string;
   const chapterId = router.query.chapterid as string;
   const sectionId = router.query.sectionid as string;
-
   const [isSectionUpdateVisible, setIsSectionUpdateVisible] = useState(true);
-  const toggleSectionUpdateVisibility = () => {
-    setIsSectionUpdateVisible(!isSectionUpdateVisible);
-  };
+  const { data: retrievedBook, isLoading } = api.book.getBook.useQuery(bookId);
 
   if (!bookId || !chapterId || !sectionId)
     return <p>No book or chapter or section found!</p>;
 
-  const { data: retrievedBook, isLoading } = api.book.getBook.useQuery(bookId);
   const chapters =
     retrievedBook && Array.isArray(retrievedBook.chapters)
       ? retrievedBook.chapters
@@ -33,6 +30,10 @@ export default function ShowSectionPage() {
   if (isLoading) return <p>Loading sections...</p>;
   const section = sections.find((s) => s.id === sectionId);
   if (!section) return <p>No section found!</p>;
+
+  const toggleSectionUpdateVisibility = () => {
+    setIsSectionUpdateVisible(!isSectionUpdateVisible);
+  };
   return (
     <>
       <Head>
@@ -48,10 +49,8 @@ export default function ShowSectionPage() {
         sectionId={sectionId}
         onToggleUpdate={toggleSectionUpdateVisibility}
       />
-      <main className="flex min-h-screen flex-col pt-20">
-        <div className="flex w-full flex-col items-center gap-2"></div>
-
-        <div className="flex w-full">
+      <main className="min-h-screen flex-col pt-32">
+        <div className="flex">
           {isSectionUpdateVisible && (
             <div className="w-1/2">
               <SectionUpdate
@@ -64,7 +63,7 @@ export default function ShowSectionPage() {
               />
             </div>
           )}
-          <div className={isSectionUpdateVisible ? "w-1/2" : "w-full"}>
+          <div className={isSectionUpdateVisible ? "w-1/2" : "w-full px-64"}>
             <SectionRenderer
               bookId={bookId}
               chapterId={chapterId}
@@ -72,6 +71,11 @@ export default function ShowSectionPage() {
             />
           </div>
         </div>
+        <BottomBanner
+          bookId={bookId}
+          chapterId={chapterId}
+          sectionId={sectionId}
+        />
       </main>
     </>
   );
