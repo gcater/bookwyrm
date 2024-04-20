@@ -5,12 +5,18 @@ import SectionBanner from "~/components/SectionBanner";
 import SectionRenderer from "~/components/SectionRenderer";
 import SectionUpdate from "~/components/SectionUpdate";
 import { api } from "~/utils/api";
+import { useState } from "react";
 
 export default function ShowSectionPage() {
   const router = useRouter();
   const bookId = router.query.bookid as string;
   const chapterId = router.query.chapterid as string;
   const sectionId = router.query.sectionid as string;
+
+  const [isSectionUpdateVisible, setIsSectionUpdateVisible] = useState(true);
+  const toggleSectionUpdateVisibility = () => {
+    setIsSectionUpdateVisible(!isSectionUpdateVisible);
+  };
 
   if (!bookId || !chapterId || !sectionId)
     return <p>No book or chapter or section found!</p>;
@@ -40,22 +46,25 @@ export default function ShowSectionPage() {
         bookId={bookId}
         chapterId={chapterId}
         sectionId={sectionId}
+        onToggleUpdate={toggleSectionUpdateVisibility}
       />
       <main className="flex min-h-screen flex-col pt-20">
         <div className="flex w-full flex-col items-center gap-2"></div>
 
         <div className="flex w-full">
-          <div className="w-1/2">
-            <SectionUpdate
-              key={section.id}
-              bookId={bookId}
-              chapterId={chapterId}
-              initialTitle={section.title}
-              sectionId={section.id}
-              initialContent={section.content}
-            />
-          </div>
-          <div className="w-1/2 p-2">
+          {isSectionUpdateVisible && (
+            <div className="w-1/2">
+              <SectionUpdate
+                key={section.id}
+                bookId={bookId}
+                chapterId={chapterId}
+                initialTitle={section.title}
+                sectionId={section.id}
+                initialContent={section.content}
+              />
+            </div>
+          )}
+          <div className={isSectionUpdateVisible ? "w-1/2" : "w-full"}>
             <SectionRenderer
               bookId={bookId}
               chapterId={chapterId}
